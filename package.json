@@ -1,0 +1,46 @@
+{
+  "name": "restaurantapi",
+  "version": "1.0.0",
+  "description": "A Restaurant Order/Inventory Management API",
+  "main": "server.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hexaF6-NinjaMC/restaurantAPI.git"
+  },
+  "author": "Aaron Bechtel",
+  "contributors": [
+    {
+      "name": "Austin Jensen"
+    },
+    {
+      "name": "Will Keel"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hexaF6-NinjaMC/restaurantAPI/issues"
+  },
+  "homepage": "https://github.com/hexaF6-NinjaMC/restaurantAPI#readme",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "http-errors": "^2.0.0",
+    "joi": "^17.12.2",
+    "mongodb": "^6.5.0",
+    "mongoose": "^8.2.3",
+    "passport": "^0.7.0",
+    "passport-github2": "^0.1.12",
+    "passport-google-oauth2": "^0.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0",
+    "swagger-autogen": "^2.23.7",
+    "swagger-ui-express": "^5.0.0"
+  }
+}
