@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 const adminController = require("../controllers/admin");
 // const validation = require("../helpers/validate"); // need help with this for JOI
-const {isAuthenticated} = require("../middleware/authenticate"); // could use some help on this
+const { isAuthenticated } = require("../middleware/authenticate"); // could use some help on this
 
 router.get("/", isAuthenticated, adminController.getAll); // Get all of the admins on the account, only admins should be able to see?
 /**
@@ -11,15 +11,18 @@ router.get("/", isAuthenticated, adminController.getAll); // Get all of the admi
  */
 router.get(
   "/create",
-  /* validation.someSortOfRule */ isAuthenticated, adminController.createAdmin
+  /* validation.someSortOfRule */ isAuthenticated,
+  adminController.createAdmin
 );
 router.get(
   "/update",
-  /* validation.someSortOfRule */ isAuthenticated, adminController.updateAdmin
+  /* validation.someSortOfRule */ isAuthenticated,
+  adminController.updateAdmin
 );
 router.get(
   "/delete",
-  /* validation.someSortOfRule */ isAuthenticated, adminController.deleteAdmin
+  /* validation.someSortOfRule */ isAuthenticated,
+  adminController.deleteAdmin
 );
 
 // Create new manager/admin user

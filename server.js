@@ -65,15 +65,15 @@ app.get(
   (req, res) => {
     res.send(
       req.session.user !== undefined
-        ? `<p>Logged in as ${req.session.user.email}.</p>
+        ? `<p>Logged user in with email <${req.session.user.email}>.</p>
 			<ul>
-				<li>Admin level is "${req.session.user["op-lvl"]}".</li>
-				<li>Admin displayName is "${req.session.user.displayName}".</li>
-				<li>Admin fname is "${req.session.user.given_name}".</li>
-				<li>Admin lname is "${req.session.user.family_name}".</li>
-				<li>Admin created on "${req.session.user.created}".</li>
-				<li>Admin displayName is "${req.session.user}".</li>
-				<li>Admin profilePic: <img src="${req.session.user.photos[0].value}" referrerpolicy="no-referrer">.</li>
+			  <li>Logged user as Admin/Manager is <b>${req.session.user.isAdmin}</b>.</li>
+			  <li>Logged user level is <b>${req.session.user.op_lvl}</b>.</li>
+			  <li>Logged user displayName is <b>${req.session.user.displayName}</b>.</li>
+			  <li>Logged user fname is <b>${req.session.user.given_name}</b>.</li>
+			  <li>Logged user lname is <b>${req.session.user.family_name}</b>.</li>
+			  <li>Logged user created on <b>${req.session.user.created}</b>.</li>
+			  <li>Logged user profilePic:<br><img src="${req.session.user.photos[0].value}" referrerpolicy="no-referrer"></li>
 			</ul>`
         : "<p>Logged out.</p>"
     );
@@ -87,10 +87,9 @@ app.get(
 
   (req, res) => {
     req.session.user = req.user;
+    req.session.user.isAdmin = true;
     req.session.user.op_lvl = 1; // Update value with retrieved mongodb record
     req.session.user.created = "YYYY-MM-DD"; // Update value with retrieved mongodb record; need to convert to locale date string!
-    // req.session.user.op_lvl = 1; // Update value with retrieved mongodb record
-    console.log(req.session.user);
     res.redirect("/auth/admin/success");
   }
 );
@@ -102,6 +101,8 @@ app.get(
 
   (req, res) => {
     req.session.user = req.user;
+    req.session.user.isAdmin = false;
+    req.session.user.created = "YYYY-MM-DD"; // Update value with retrieved mongodb record; need to convert to locale date string!
     res.redirect("/auth/user/success");
   }
 );
