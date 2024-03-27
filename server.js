@@ -65,7 +65,7 @@ app.get(
   (req, res) => {
     res.send(
       req.session.user !== undefined
-        ? `<p>Logged user in with email <${req.session.user.email}>.</p>
+        ? `<p>Logged user in with email <b>${req.session.user.email}</b>.</p>
 			<ul>
 			  <li>Logged user as Admin/Manager is <b>${req.session.user.isAdmin}</b>.</li>
 			  <li>Logged user level is <b>${req.session.user.op_lvl}</b>.</li>
