@@ -1,0 +1,56 @@
+/**
+ * Contains the passport strategies for the application
+ */
+
+const GoogleStrategy = require("passport-google-oauth2").Strategy;
+const passport = require("passport");
+
+const strategies = () => {
+  // Admin passport strategy
+  passport.use(
+    "admin",
+    new GoogleStrategy(
+      {
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: process.env.GOOGLE_ADMIN_CALLBACK_URL, // production: use Render env var, development: use received ENV vars.
+        passReqToCallback: true
+      },
+      (request, accessToken, refreshToken, profile, done) =>
+        // User.findOrCreate({ googleId: profile.id }, function (err, user) {
+        //  return done(err, user);
+        // }); -- unsure how to do this, will look into it or may need help
+        done(null, profile)
+    ),
+    {
+      failureRedirect: "/api-docs",
+      session: false
+    }
+  );
+
+  // User passport strategy
+  passport.use(
+    "user",
+    new GoogleStrategy(
+      {
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: process.env.GOOGLE_USER_CALLBACK_URL, // production: use Render env var, development: use received ENV vars.
+        passReqToCallback: true
+      },
+      (request, accessToken, refreshToken, profile, done) =>
+        // User.findOrCreate({ googleId: profile.id }, function (err, user) {
+        //  return done(err, user);
+        // }); -- unsure how to do this, will look into it or may need help
+        done(null, profile)
+    ),
+    {
+      failureRedirect: "/api-docs",
+      session: false
+    }
+  );
+};
+
+module.exports = {
+  strategies
+};

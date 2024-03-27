@@ -1,26 +1,24 @@
-const passport = require('passport');
+/**
+ * Contains all root (server) routes for the application:
+ * <domain>/auth, <domain>/admin, <domain>/user, <domain>/order, <domain>/inventory
+ */
 
-const router = require('express').Router();
+// const passport = require("passport");
+const router = require("express").Router();
+const { strategies } = require("../middleware/passport-strategies");
 
-//router.use('/', require('./swagger')); swagger not yet implemented
+// Use passport strategies (AKA "call them")
+strategies();
 
-router.use('/admin', require('./admin'));
-router.use('/user', require('./users'));
-router.use('/order', require('./orders'));
-router.use('/inventory', require('./inv'));
+// router.use('/', require('./swagger')); swagger not yet implemented
+
+router.use("/admin", require("./admin"));
+// router.use("/user", require("./users"));
+// router.use("/order", require("./orders"));
+// router.use("/inventory", require("./inv"));
 
 // LOGIN - LOGOUT may not be correct?
 
-router.get('/login', passport.authenticate('google'), (req, res) => {
-    // code here?
-});
-
-router.get('/logout', function(req, res, next) {
-    req.logout(function(err) {
-        if (err) { return next(err); }
-        res.redirect('/');
-    })
-});
-
+router.use("/auth", require("./auth"));
 
 module.exports = router;
