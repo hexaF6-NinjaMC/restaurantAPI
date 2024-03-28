@@ -1,3 +1,7 @@
+/**
+ * Contains the <root>/admin/ endpoints/requests.
+ */
+
 const express = require("express");
 
 const router = express.Router();

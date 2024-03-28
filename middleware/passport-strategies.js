@@ -1,5 +1,6 @@
 /**
- * Contains the passport strategies for the application
+ * Contains the passport strategies for the application.
+ * If GitHub was requested, it would be implemented similarly to the Google strategies.
  */
 
 const GoogleStrategy = require("passport-google-oauth2").Strategy;

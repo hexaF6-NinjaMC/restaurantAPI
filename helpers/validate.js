@@ -1,5 +1,6 @@
 /**
  * A JOI validation schema for `req.body` in '/api-docs'
+ * Contains schema for admin, user, inventory, and order records.
  */
 
 const Joi = require("joi");

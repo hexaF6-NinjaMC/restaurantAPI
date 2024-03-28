@@ -1,5 +1,7 @@
 /**
- * Contains authentication routes for '/user' and '/admin'
+ * Contains authentication routes for '/user' and '/admin',
+ * <root>/auth/user/*
+ * <root>/auth/admin/*
  */
 
 const passport = require("passport");

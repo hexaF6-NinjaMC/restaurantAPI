@@ -19,6 +19,7 @@ router.use("/admin", require("./admin"));
 
 // LOGIN - LOGOUT may not be correct?
 
+// prefix </admin and /user> with /auth
 router.use("/auth", require("./auth"));
 
 module.exports = router;

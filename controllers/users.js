@@ -1,5 +1,6 @@
 /**
  * Started implementing functionality for users.
+ * Contains functionality for creating, reading, updating, and deleting users according to the Joi schema.
  */
 const mongodb = require("../data/database");
 
