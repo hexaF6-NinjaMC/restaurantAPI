@@ -4,6 +4,7 @@
 const mongodb = require("../data/database");
 
 const getAll = async (req, res, next) => {
+  // #swagger.tags = ['Orders']
   try {
     const result = await mongodb
       .getDb()
@@ -26,19 +27,34 @@ const getAll = async (req, res, next) => {
 };
 
 const createOrder = async (req, res) => {
+  // #swagger.tags = ['Orders']
   res.status(200).json({ message: "Admin POST reuest" });
 };
 
 const updateOrder = async (req, res) => {
+  // #swagger.tags = ['Orders']
   res.status(200).json({ message: "Admin PUT reuest" });
 };
 
 const deleteOrder = async (req, res) => {
+  // #swagger.tags = ['Orders']
   res.status(200).json({ message: "Admin DELETE reuest" });
+};
+
+const getOrderById = async (req, res) => {
+  // #swagger.tags = ['Orders']
+  res.status(200).json({ message: "OrderById GET reuest" });
+};
+
+const getAllOrdersByUserId = async (req, res) => {
+  // #swagger.tags = ['Orders']
+  res.status(200).json({ message: "AllOrdersByUserId GET reuest" });
 };
 
 module.exports = {
   getAll,
+  getOrderById,
+  getAllOrdersByUserId,
   createOrder,
   updateOrder,
   deleteOrder

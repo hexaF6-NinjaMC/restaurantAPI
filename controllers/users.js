@@ -5,6 +5,12 @@
 const mongodb = require("../data/database");
 
 const getAll = async (req, res, next) => {
+  // #swagger.tags = ['User']
+  /* #swagger.security = [{
+      "OAuthUser": [
+        "read"
+      ]
+  }] */
   try {
     const result = await mongodb
       .getDb()
@@ -26,21 +32,36 @@ const getAll = async (req, res, next) => {
   }
 };
 
+const getUserById = async (req, res) => {
+  // #swagger.tags = ['User']
+  res.status(200).json({ message: "GET user by ID Endpoint" });
+};
+
 const createUser = async (req, res) => {
+  // #swagger.tags = ['User']
   res.status(200).json({ message: "User POST reuest" });
 };
 
 const updateUser = async (req, res) => {
+  // #swagger.tags = ['User']
   res.status(200).json({ message: "User PUT reuest" });
 };
 
 const deleteUser = async (req, res) => {
+  // #swagger.tags = ['User']
   res.status(200).json({ message: "User DELETE reuest" });
+};
+
+const login = async (req, res) => {
+  // #swagger.tags = ['User']
+  res.status(200).json({ message: "Login Endpoint" });
 };
 
 module.exports = {
   getAll,
+  getUserById,
   createUser,
   updateUser,
-  deleteUser
+  deleteUser,
+  login
 };

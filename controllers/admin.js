@@ -6,6 +6,7 @@
 const mongodb = require("../data/database");
 
 const getAll = async (req, res, next) => {
+  // #swagger.tags = ['Admin']
   try {
     const result = await mongodb
       .getDb()
@@ -29,20 +30,24 @@ const getAll = async (req, res, next) => {
 
 const createAdmin = async (req, res) => {
   // TODO: implement admin creation, permission handling for op-lvl 1
+  // #swagger.tags = ['Admin']
   res.status(200).json({ message: "Admin POST request" });
 };
 
 const updateAdmin = async (req, res) => {
   // TODO: implement admin creation, permission handling for op-lvl 1
+  // #swagger.tags = ['Admin']
   res.status(200).json({ message: "Admin PUT request" });
 };
 
 const deleteAdmin = async (req, res) => {
   // TODO: implement admin creation, permission handling for op-lvl 1
+  // #swagger.tags = ['Admin']
   res.status(200).json({ message: "Admin DELETE request" });
 };
 
 const getAllManagers = async (req, res, next) => {
+  // #swagger.tags = ['Admin']
   try {
     const result = await mongodb
       .getDb()
@@ -66,16 +71,19 @@ const getAllManagers = async (req, res, next) => {
 
 const createManager = async (req, res) => {
   // TODO: implement admin creation, permission handling for op-lvl 1
+  // #swagger.tags = ['Admin']
   res.status(200).json({ message: "Manager POST request" });
 };
 
 const updateManager = async (req, res) => {
   // TODO: implement admin creation, permission handling for op-lvl 1
+  // #swagger.tags = ['Admin']
   res.status(200).json({ message: "Manager PUT request" });
 };
 
 const deleteManager = async (req, res) => {
   // TODO: implement admin creation, permission handling for op-lvl 1
+  // #swagger.tags = ['Admin']
   res.status(200).json({ message: "Manager DELETE request" });
 };
 

@@ -12,13 +12,13 @@ const { isAuthenticated } = require("../middleware/authenticate");
 router.get("/", isAuthenticated, /* isAdmin, */ ordersController.getAll);
 
 // Get order by id
-router.get("/:id", /* validation.isValidId, */ ordersController.getById);
+router.get("/:id", /* validation.isValidId, */ ordersController.getOrderById);
 
 // Get all orders placed by a user by user ID
 router.get(
   "/user/:id",
   /* validation.isValidId, */ isAuthenticated,
-  ordersController.getByUser
+  ordersController.getAllOrdersByUserId
 );
 
 // Place a new order

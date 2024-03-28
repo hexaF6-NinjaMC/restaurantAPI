@@ -4,6 +4,7 @@
 const mongodb = require("../data/database");
 
 const getAll = async (req, res, next) => {
+  // #swagger.tags = ['Inventory']
   try {
     const result = await mongodb
       .getDb()
@@ -25,21 +26,30 @@ const getAll = async (req, res, next) => {
   }
 };
 
-const createInventory = async (req, res) => {
-  res.status(200).json({ message: "Inventory POST reuest" });
+const createItem = async (req, res) => {
+  // #swagger.tags = ['Inventory']
+  res.status(200).json({ message: "Inventory POST request" });
 };
 
-const updateInventory = async (req, res) => {
-  res.status(200).json({ message: "Inventory PUT reuest" });
+const updateItem = async (req, res) => {
+  // #swagger.tags = ['Inventory']
+  res.status(200).json({ message: "Inventory PUT request" });
 };
 
-const deleteInventory = async (req, res) => {
-  res.status(200).json({ message: "Inventory DELETE reuest" });
+const deleteItem = async (req, res) => {
+  // #swagger.tags = ['Inventory']
+  res.status(200).json({ message: "Inventory DELETE request" });
+};
+
+const getById = async (req, res) => {
+  // #swagger.tags = ['Inventory']
+  res.status(200).json({ message: "Inventory GET by ID request" });
 };
 
 module.exports = {
   getAll,
-  createInventory,
-  updateInventory,
-  deleteInventory
+  getById,
+  createItem,
+  updateItem,
+  deleteItem
 };
