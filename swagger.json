@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "swagger": "2.0",
   "info": {
     "title": "Budget API",
@@ -21,10 +22,58 @@
     "/": {
       "get": {
         "tags": ["Hello World"],
+=======
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Restaurant API",
+    "description": "Restaurant orders, inventory, users, and administrator management"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Local server for testing"
+    },
+    {
+      "url": "https://render.com",
+      "description": "Server for production"
+    }
+  ],
+  "tags": [
+    {
+      "name": "hello world",
+      "description": "General greetings or introductory information"
+    },
+    {
+      "name": "orders",
+      "description": "Endpoints related to managing restaurant orders"
+    },
+    {
+      "name": "users",
+      "description": "Endpoints related to managing users"
+    },
+    {
+      "name": "inventory",
+      "description": "Endpoints related to managing restaurant inventory"
+    },
+    {
+      "name": "admin",
+      "description": "Endpoints related to administrator management"
+    },
+    {
+      "name": "auth",
+      "description": "Endpoints related to authentication"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+>>>>>>> e578ec341adba7c6daba58c2c8b7bd65450bbec6
         "description": "",
         "responses": {
           "200": {
             "description": "OK"
+<<<<<<< HEAD
           }
         }
       }
@@ -56,10 +105,85 @@
             "schema": {
               "type": "object",
               "properties": {}
+=======
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": ["hello world"]
+      },
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": ["hello world"]
+      }
+    },
+    "/create": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": ["orders"]
+      }
+    },
+    "/update": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": ["orders"]
+      }
+    },
+    "/delete": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": ["orders"]
+      }
+    },
+    "/{id}": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+>>>>>>> e578ec341adba7c6daba58c2c8b7bd65450bbec6
             }
           }
         ],
         "responses": {
+<<<<<<< HEAD
           "204": {
             "description": "No Content"
           },
@@ -106,3 +230,286 @@
     }
   }
 }
+=======
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": ["orders"]
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": ["orders"]
+      },
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "default": {
+            "description": ""
+          }
+        },
+        "tags": ["orders"]
+      }
+    },
+    "/api-docs": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "tags": ["hello world"]
+      }
+    },
+    "/admin/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": ["admin"]
+      },
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": ["admin"]
+      }
+    },
+    "/admin/create": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": ["admin"]
+      }
+    },
+    "/admin/update": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": ["admin"]
+      }
+    },
+    "/admin/delete": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": ["admin"]
+      }
+    },
+    "/admin/{id}": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": ["admin"]
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": ["admin"]
+      }
+    },
+    "/auth/admin/login": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "tags": ["auth"]
+      }
+    },
+    "/auth/user/login": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "tags": ["auth"]
+      }
+    },
+    "/auth/user/logout": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "tags": ["auth"]
+      }
+    },
+    "/user/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": ["users"]
+      }
+    },
+    "/admin/login": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "tags": ["admin"]
+      }
+    },
+    "/user/login": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "tags": ["users"]
+      }
+    },
+    "/user/logout": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "tags": ["users"]
+      }
+    },
+    "/register": {
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": ["auth"]
+      }
+    },
+    "/login": {
+      "post": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "tags": ["auth"]
+      }
+    }
+  }
+}
+>>>>>>> e578ec341adba7c6daba58c2c8b7bd65450bbec6
