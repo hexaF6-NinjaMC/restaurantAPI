@@ -10,7 +10,7 @@ const { strategies } = require("../middleware/passport-strategies");
 // Use passport strategies (AKA "call them")
 strategies();
 
-// router.use('/', require('./swagger')); swagger not yet implemented
+router.use("/", require("./swagger"));
 
 router.use("/admin", require("./admin"));
 // router.use("/user", require("./users"));
