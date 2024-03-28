@@ -1,4 +1,3 @@
-
 /**
  * Contains the <root>/user/ endpoints/requests.
  */
@@ -9,7 +8,7 @@ const router = express.Router();
 
 const usersController = require("../controllers/users");
 // const validation = require('../middleware/validate'); // need help with this for JOI
-const {isAuthenticated} = require("../middleware/authenticate"); // could use some help on this
+const { isAuthenticated } = require("../middleware/authenticate"); // could use some help on this
 
 // Get all users
 router.get("/", isAuthenticated, usersController.getAll);
@@ -17,7 +16,8 @@ router.get("/", isAuthenticated, usersController.getAll);
 // Get user by id
 router.get(
   "/:id",
-  /* validation.isValidId, */ isAuthenticated, usersController.getUserById
+  /* validation.isValidId, */ isAuthenticated,
+  usersController.getUserById
 );
 
 /**
@@ -45,13 +45,15 @@ router.post("/login", /* isAuthenticated, */ usersController.login);
 // Update user if authenticated as admin or user
 router.put(
   "/:id",
-  /* validation.isValidId, validation.someSortOfRule, */ isAuthenticated, usersController.updateUser
+  /* validation.isValidId, validation.someSortOfRule, */ isAuthenticated,
+  usersController.updateUser
 );
 
 // Delete user by ID
 router.delete(
   "/:id",
-  /* validation.isValidId, */ isAuthenticated, usersController.deleteUser
+  /* validation.isValidId, */ isAuthenticated,
+  usersController.deleteUser
 );
 
 // gotta implement valid and auth

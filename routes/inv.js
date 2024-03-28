@@ -8,7 +8,7 @@ const router = express.Router();
 
 const invController = require("../controllers/inv");
 // const validation = require('../middleware/validation'); need help with this for JOI
-const {isAuthenticated} = require("../middleware/authenticate");
+const { isAuthenticated } = require("../middleware/authenticate");
 
 // get all inventory
 router.get("/", invController.getAll);
@@ -19,19 +19,22 @@ router.get("/:id", /* validation.isValidId, */ invController.getById);
 // create new inventory
 router.post(
   "/",
-  /* validation.someSortOfRule, */ isAuthenticated, invController.createItem
+  /* validation.someSortOfRule, */ isAuthenticated,
+  invController.createItem
 );
 
 // update inventory
 router.put(
   "/:id",
-  /* validation.isValidId, */ isAuthenticated, invController.updateItem
+  /* validation.isValidId, */ isAuthenticated,
+  invController.updateItem
 );
 
 // delete inventory
 router.delete(
   "/:id",
-  /* validation.isValidId, */ isAuthenticated, invController.deleteItem
+  /* validation.isValidId, */ isAuthenticated,
+  invController.deleteItem
 );
 
 // gotta implement valid and auth

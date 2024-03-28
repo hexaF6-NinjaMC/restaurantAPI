@@ -6,24 +6,33 @@ const router = require("express").Router();
 
 const ordersController = require("../controllers/orders");
 // const validation = require('../middleware/validate'); // need help with this for JOI
-const {isAuthenticated} = require("../middleware/authenticate");
+const { isAuthenticated } = require("../middleware/authenticate");
 
 // Gets All Orders, only admins should be able to see?
-router.get("/", isAuthenticated, /* isAdmin, */ ordersController.getAll); 
+router.get("/", isAuthenticated, /* isAdmin, */ ordersController.getAll);
 
 // Get order by id
-router.get("/:id", /* validation.isValidId, */ ordersController.getById); 
+router.get("/:id", /* validation.isValidId, */ ordersController.getById);
 
 // Get all orders placed by a user by user ID
-router.get("/user/:id", /* validation.isValidId, */ isAuthenticated, ordersController.getByUser); 
+router.get(
+  "/user/:id",
+  /* validation.isValidId, */ isAuthenticated,
+  ordersController.getByUser
+);
 
 // Place a new order
-router.post("/", /* validation.someSortOfRule, */ isAuthenticated, ordersController.createOrder);
+router.post(
+  "/",
+  /* validation.someSortOfRule, */ isAuthenticated,
+  ordersController.createOrder
+);
 
 // Updates an order based on order ID
 router.put(
   "/:id",
-  /* validation.isValidId, validation.someSortOfRule, */ isAuthenticated, ordersController.updateOrder
+  /* validation.isValidId, validation.someSortOfRule, */ isAuthenticated,
+  ordersController.updateOrder
 );
 
 // Delete order ID for admin and user who placed order

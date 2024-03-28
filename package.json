@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "test",
-    "swagger": "node swagger.js",
+    "swagger": "node ./routes/swagger.js",
     "dev": "npm run lint && nodemon server.js",
     "start": "node server.js",
     "lint": "npm run lint:prettier && npm run lint:eslint",

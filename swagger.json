@@ -1,142 +1,108 @@
 {
-    "swagger": "2.0",
-    "info": {
-      "title": "Budget API",
-      "description": "Budgeting API with user management and authentication",
-      "version": "1.0.0"
+  "swagger": "2.0",
+  "info": {
+    "title": "Budget API",
+    "description": "Budgeting API with user management and authentication",
+    "version": "1.0.0"
+  },
+  "hosts": [
+    {
+      "host": "localhost:8080",
+      "basePath": "/",
+      "schemes": ["http"]
     },
-    "hosts": [
-        {
-            "host": "localhost:8080",
-            "basePath": "/",
-            "schemes": [
-                "http"
-            ]
-        },
-        {
-            "host": "render.com",
-            "basePath": "/",
-            "schemes": [
-                "https"
-            ]
-        }
-    ],
-    "paths": {
-        "/": {
-            "get": {
-                "tags": [
-                    "Hello World"
-                ],
-                "description": "",
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
-        "/orders": {
-            "get": {
-                "tags": [
-                    "Orders"
-                ],
-                "description": "",
-                "produces": [
-                    "application/json"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    },
-                    "400": {
-                        "description": "Resource not found."
-                    },
-                    "500": {
-                        "description": "Internal Server Error"
-                    }
-                }
-            },
-            "post": {
-                "tags": [
-                    "Orders"
-                ],
-                "description": "",
-                "parameters": [
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "No Content"
-                    },
-                    "500": {
-                        "description": "Internal Server Error"
-                    }
-                }
-            }
-        },
-        "/admin": {
-            "get": {
-                "tags": [
-                    "Admin"
-                ],
-                "description": "",
-                "responses": {
-                    
-                }
-            }
-        },
-        "/users": {
-            "get": {
-                "tags": [
-                    "Users"
-                ],
-                "description": "",
-                "responses": {
-                    
-                }
-            }
-        },
-        "/inv": {
-            "get": {
-                "tags": [
-                    "Inventory"
-                ],
-                "description": "",
-                "responses": {
-                    
-                }
-            }
-        },
-        "/auth": {
-            "get": {
-                "tags": [
-                    "Authentication"
-                ],
-                "description": "",
-                "responses": {
-                    
-                }
-            }
-        },
-        "/logout": {
-            "get": {
-                "tags": [
-                    "Logout"
-                ],
-                "description": "",
-                "responses": {
-                    
-                }
-            }
-        }
+    {
+      "host": "render.com",
+      "basePath": "/",
+      "schemes": ["https"]
     }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": ["Hello World"],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/orders": {
+      "get": {
+        "tags": ["Orders"],
+        "description": "",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Resource not found."
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Orders"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/admin": {
+      "get": {
+        "tags": ["Admin"],
+        "description": "",
+        "responses": {}
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": ["Users"],
+        "description": "",
+        "responses": {}
+      }
+    },
+    "/inv": {
+      "get": {
+        "tags": ["Inventory"],
+        "description": "",
+        "responses": {}
+      }
+    },
+    "/auth": {
+      "get": {
+        "tags": ["Authentication"],
+        "description": "",
+        "responses": {}
+      }
+    },
+    "/logout": {
+      "get": {
+        "tags": ["Logout"],
+        "description": "",
+        "responses": {}
+      }
+    }
+  }
 }
