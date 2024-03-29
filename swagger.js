@@ -10,8 +10,7 @@ const doc = {
   },
   servers: [
     {
-      // Will need to change URL to https://<projectName>.onrender.com/
-      url: "https://render.com",
+      url: "https://restaurantapi-m771.onrender.com/",
       description: "Server for production"
     },
     {
