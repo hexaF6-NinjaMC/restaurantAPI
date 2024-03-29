@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://restaurantapi-m771.onrender.com",
+      "url": "https://render.com",
       "description": "Server for production"
     },
     {
