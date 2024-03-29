@@ -29,7 +29,7 @@ router.get(
  * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer
  */
 // Create a new user
-router.post("/register", /* isAuthenticated, */ usersController.createUser);
+router.post("/register", isAuthenticated, usersController.createUser);
 
 /**
  * ~Aaron: consider removing from routes, as OAuth2 is implemented through <root>/auth/*. Or,

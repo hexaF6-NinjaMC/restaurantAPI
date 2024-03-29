@@ -256,9 +256,41 @@
       "post": {
         "tags": ["User"],
         "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "displayName": {
+                  "example": "ChuckyB."
+                },
+                "fname": {
+                  "example": "Charles"
+                },
+                "lname": {
+                  "example": "Bartowski"
+                },
+                "profilePicURI": {
+                  "example": "any"
+                },
+                "email": {
+                  "example": "charlesb@spy.com"
+                },
+                "created": {
+                  "example": "03/28/2024"
+                }    
+              }
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
