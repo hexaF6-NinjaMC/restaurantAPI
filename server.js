@@ -91,7 +91,7 @@ app.get(
 
   (req, res) => {
     req.session.user = req.user;
-    req.session.user.isAdmin = true;
+    req.session.user.isAdmin = true; // Used to check if some operations are permitted
     req.session.user.op_lvl = 1; // Update value with retrieved mongodb record
     req.session.user.created = "YYYY-MM-DD"; // Update value with retrieved mongodb record; need to convert to locale date string!
     res.redirect("/auth/admin/success");

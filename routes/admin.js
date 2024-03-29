@@ -1,47 +1,39 @@
 /**
- * Contains the <root>/admin/ endpoints/requests.
+ * Contains the <root>/admin/ endpoints/requests with appropriate validations.
  */
 
-const express = require("express");
-
-const router = express.Router();
+const router = require("express").Router();
 const adminController = require("../controllers/admin");
-// const validation = require("../helpers/validate"); // need help with this for JOI
-const { isAuthenticated } = require("../middleware/authenticate"); // could use some help on this
+const { isValidId, isValidLevel } = require("../middleware/validation");
+const { isAuthenticated, isAdmin } = require("../middleware/authenticate");
 
-router.get("/", isAuthenticated, adminController.getAll); // Get all of the admins on the account, only admins should be able to see?
-/**
- * testing admin endpoints
- */
-router.get(
-  "/create",
+// Get all of the admins/managers on the account, only (op_lvl 1 and 2) should be able to see.
+router.get("/", isAuthenticated, isAdmin, isValidLevel, adminController.getAll);
+
+// Create new admin/manager in record
+router.post(
+  "/",
   /* validation.someSortOfRule */ isAuthenticated,
+  isAdmin,
   adminController.createAdmin
 );
-router.get(
-  "/update",
-  /* validation.someSortOfRule */ isAuthenticated,
-  adminController.updateAdmin
-);
-router.get(
-  "/delete",
-  /* validation.someSortOfRule */ isAuthenticated,
-  adminController.deleteAdmin
-);
 
-// Create new manager/admin user
-router.post("/", /* validation.someSortOfRule */ adminController.createAdmin);
-
-// Update to admin or manager
+// Update to admin/manager by ID
 router.put(
   "/:id",
-  /* validation.isValidId, */ /* validation.someSortOfRule, */ /* isAuthenticated, */ adminController.updateAdmin
+  /* validation.someSortOfRule, */ isAuthenticated,
+  isAdmin,
+  isValidId,
+  adminController.updateAdmin
 );
 
-// Delete user by ID
+// Delete admin/manager by ID
 router.delete(
   "/:id",
-  /* validation.isValidId, isAuthenticated, */ adminController.deleteAdmin
+  isAuthenticated,
+  isAdmin,
+  isValidId,
+  adminController.deleteAdmin
 );
 
 // gotta implement valid and auth

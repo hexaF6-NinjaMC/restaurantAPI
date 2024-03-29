@@ -46,6 +46,45 @@ const doc = {
           }
         }
       }
+    },
+    schemas: {
+      schemaAdminRequired: {
+        $displayName: "",
+        $fname: "",
+        lname: "",
+        $email: "",
+        $op_lvl: "",
+        profilePicURI: ""
+      },
+      schemaAdminOptional: {
+        displayName: "",
+        fname: "",
+        lname: "",
+        email: "",
+        op_lvl: "",
+        profilePicURI: ""
+      },
+      schemaUserOptional: {
+        displayName: "",
+        fname: "",
+        lname: "",
+        email: "",
+        profilePicURI: ""
+      },
+      schemaOrderOptional: {
+        user: "",
+        requests: [
+          {
+            itemName: "",
+            amount: ""
+          }
+        ]
+      },
+      schemaInventoryOptional: {
+        price: "",
+        stock: "",
+        itemDescription: ""
+      }
     }
   }
 };

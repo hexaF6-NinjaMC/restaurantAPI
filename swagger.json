@@ -16,111 +16,67 @@
     }
   ],
   "paths": {
-    "/auth/admin/login": {
-      "get": {
-        "tags": ["Auth-Admin"],
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/auth/admin/logout": {
-      "get": {
-        "tags": ["Auth-Admin"],
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/auth/user/login": {
-      "get": {
-        "tags": ["Auth-User"],
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/auth/user/logout": {
-      "get": {
-        "tags": ["Auth-User"],
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
     "/admin/": {
       "get": {
         "tags": ["Admin"],
-        "description": "",
+        "summary": "Get All Admin (lvl 1) or Manager (lvl 2) records.",
+        "description": "Get All Admin (lvl 1) or Manager (lvl 2) records.",
+        "parameters": [
+          {
+            "name": "op_lvl",
+            "description": "The Operator level to filter by.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK: Admin record was successfully created."
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized: You must be logged in with an Admin account."
+          },
+          "403": {
+            "description": "Forbidden: You must be logged in with an Admin account with the appropriate privileges."
+          },
+          "500": {
+            "description": "Internal Server Error: Something happened on the server side while creating the Admin profile."
           }
         }
       },
       "post": {
         "tags": ["Admin"],
-        "description": "",
+        "summary": "Create a new Admin (lvl 1 or 2) record.",
+        "description": "Create a new Admin (lvl 1 or 2) record.",
         "responses": {
           "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/admin/create": {
-      "get": {
-        "tags": ["Admin"],
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
+            "description": "OK: Admin record was successfully created."
           },
           "401": {
-            "description": "Unauthorized"
-          }
-        }
-      }
-    },
-    "/admin/update": {
-      "get": {
-        "tags": ["Admin"],
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
+            "description": "Unauthorized: You must be logged in with an Admin account."
           },
-          "401": {
-            "description": "Unauthorized"
-          }
-        }
-      }
-    },
-    "/admin/delete": {
-      "get": {
-        "tags": ["Admin"],
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
+          "403": {
+            "description": "Forbidden: You must be logged in with an Admin account with the appropriate privileges."
           },
-          "401": {
-            "description": "Unauthorized"
+          "422": {
+            "description": "Unprocessable Entity: Data is not valid."
+          },
+          "500": {
+            "description": "Internal Server Error: Something happened on the server side while creating the Admin profile."
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/schemaAdminRequired"
+              }
+            }
           }
         }
       }
@@ -128,7 +84,8 @@
     "/admin/{id}": {
       "put": {
         "tags": ["Admin"],
-        "description": "",
+        "summary": "Update Admin/Manager record, ref'd by _id, with optional fields.",
+        "description": "Update Admin/Manager record, ref'd by _id, with optional fields.",
         "parameters": [
           {
             "name": "id",
@@ -141,13 +98,38 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK: Admin record was successfully created."
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized: You must be logged in with an Admin account."
+          },
+          "403": {
+            "description": "Forbidden: You must be logged in with an Admin account with the appropriate privileges."
+          },
+          "422": {
+            "description": "Unprocessable Entity: Data is not valid."
+          },
+          "500": {
+            "description": "Internal Server Error: Something happened on the server side while creating the Admin profile."
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/schemaAdminOptional"
+              }
+            }
           }
         }
       },
       "delete": {
         "tags": ["Admin"],
-        "description": "",
+        "summary": "Delete Admin/Manager record, ref'd by _id, with optional fields.",
+        "description": "Delete Admin/Manager record, ref'd by _id, with optional fields.",
         "parameters": [
           {
             "name": "id",
@@ -160,7 +142,19 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK: Admin record was successfully created."
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized: You must be logged in with an Admin account."
+          },
+          "403": {
+            "description": "Forbidden: You must be logged in with an Admin account with the appropriate privileges."
+          },
+          "500": {
+            "description": "Internal Server Error: Something happened on the server side while creating the Admin profile."
           }
         }
       }
@@ -202,8 +196,17 @@
           "200": {
             "description": "OK"
           },
+          "400": {
+            "description": "Bad Request"
+          },
           "401": {
             "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
@@ -256,41 +259,44 @@
       "post": {
         "tags": ["User"],
         "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "displayName": {
-                  "example": "ChuckyB."
-                },
-                "fname": {
-                  "example": "Charles"
-                },
-                "lname": {
-                  "example": "Bartowski"
-                },
-                "profilePicURI": {
-                  "example": "any"
-                },
-                "email": {
-                  "example": "charlesb@spy.com"
-                },
-                "created": {
-                  "example": "03/28/2024"
-                }    
-              }
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
           "500": {
             "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "displayName": {
+                    "example": "any"
+                  },
+                  "fname": {
+                    "example": "any"
+                  },
+                  "lname": {
+                    "example": "any"
+                  },
+                  "profilePicURI": {
+                    "example": "any"
+                  },
+                  "email": {
+                    "example": "any"
+                  },
+                  "creationDate": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -532,6 +538,134 @@
               "write": "Grants POST and PUT requests",
               "delete": "Grants DELETE requests"
             }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "schemaAdminRequired": {
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "example": ""
+          },
+          "fname": {
+            "type": "string",
+            "example": ""
+          },
+          "lname": {
+            "type": "string",
+            "example": ""
+          },
+          "email": {
+            "type": "string",
+            "example": ""
+          },
+          "op_lvl": {
+            "type": "string",
+            "example": ""
+          },
+          "profilePicURI": {
+            "type": "string",
+            "example": ""
+          }
+        },
+        "required": ["displayName", "fname", "email", "op_lvl"]
+      },
+      "schemaAdminOptional": {
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "example": ""
+          },
+          "fname": {
+            "type": "string",
+            "example": ""
+          },
+          "lname": {
+            "type": "string",
+            "example": ""
+          },
+          "email": {
+            "type": "string",
+            "example": ""
+          },
+          "op_lvl": {
+            "type": "string",
+            "example": ""
+          },
+          "profilePicURI": {
+            "type": "string",
+            "example": ""
+          }
+        }
+      },
+      "schemaUserOptional": {
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "example": ""
+          },
+          "fname": {
+            "type": "string",
+            "example": ""
+          },
+          "lname": {
+            "type": "string",
+            "example": ""
+          },
+          "email": {
+            "type": "string",
+            "example": ""
+          },
+          "profilePicURI": {
+            "type": "string",
+            "example": ""
+          }
+        }
+      },
+      "schemaOrderOptional": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "string",
+            "example": ""
+          },
+          "requests": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "itemName": {
+                  "type": "string",
+                  "example": ""
+                },
+                "amount": {
+                  "type": "string",
+                  "example": ""
+                }
+              }
+            }
+          }
+        }
+      },
+      "schemaInventoryOptional": {
+        "type": "object",
+        "properties": {
+          "price": {
+            "type": "string",
+            "example": ""
+          },
+          "stock": {
+            "type": "string",
+            "example": ""
+          },
+          "itemDescription": {
+            "type": "string",
+            "example": ""
           }
         }
       }

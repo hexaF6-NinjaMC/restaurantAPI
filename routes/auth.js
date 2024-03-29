@@ -13,13 +13,13 @@ const router = require("express").Router();
  * Admin auth routes
  */
 router.get(
-  // #swagger.tags = ['Auth-Admin']
+  // #swagger.ignore = true
   "/admin/login",
   passport.authenticate("admin", { scope: ["profile", "email"] })
 );
 
 router.get(
-  // #swagger.tags = ['Auth-Admin']
+  // #swagger.ignore = true
   "/admin/logout",
   (req, res, next) => {
     req.logout((err) => {
@@ -46,13 +46,13 @@ router.get(
  * User auth routes
  */
 router.get(
-  // #swagger.tags = ['Auth-User']
+  // #swagger.ignore = true
   "/user/login",
   passport.authenticate("user", { scope: ["profile", "email"] })
 );
 
 router.get(
-  // #swagger.tags = ['Auth-User']
+  // #swagger.ignore = true
   "/user/logout",
   (req, res, next) => {
     req.logout((err) => {
