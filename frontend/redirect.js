@@ -1,5 +1,6 @@
 function redirect() {
-  window.location.href = "/"; // Change to '/api-docs' when SwaggerUI is implemented ~AaronB
+  // console.log("redirecting");
+  window.location.href = "/api-docs"; // Change to '/api-docs' when SwaggerUI is implemented ~AaronB
 }
 
-window.onload(setTimeout(redirect, 3000));
+window.onload = setTimeout(redirect, 3000);
