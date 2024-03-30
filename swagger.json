@@ -18,7 +18,9 @@
   "paths": {
     "/admin/": {
       "get": {
-        "tags": ["Admin"],
+        "tags": [
+          "Admin"
+        ],
         "summary": "Get All Admin (lvl 1) or Manager (lvl 2) records.",
         "description": "Get All Admin (lvl 1) or Manager (lvl 2) records.",
         "parameters": [
@@ -50,7 +52,9 @@
         }
       },
       "post": {
-        "tags": ["Admin"],
+        "tags": [
+          "Admin"
+        ],
         "summary": "Create a new Admin (lvl 1 or 2) record.",
         "description": "Create a new Admin (lvl 1 or 2) record.",
         "responses": {
@@ -83,7 +87,9 @@
     },
     "/admin/{id}": {
       "put": {
-        "tags": ["Admin"],
+        "tags": [
+          "Admin"
+        ],
         "summary": "Update Admin/Manager record, ref'd by _id, with optional fields.",
         "description": "Update Admin/Manager record, ref'd by _id, with optional fields.",
         "parameters": [
@@ -127,7 +133,9 @@
         }
       },
       "delete": {
-        "tags": ["Admin"],
+        "tags": [
+          "Admin"
+        ],
         "summary": "Delete Admin/Manager record, ref'd by _id, with optional fields.",
         "description": "Delete Admin/Manager record, ref'd by _id, with optional fields.",
         "parameters": [
@@ -161,7 +169,9 @@
     },
     "/user/": {
       "get": {
-        "tags": ["User"],
+        "tags": [
+          "User"
+        ],
         "description": "",
         "responses": {
           "200": {
@@ -173,14 +183,18 @@
         },
         "security": [
           {
-            "OAuthUser": ["read"]
+            "OAuthUser": [
+              "read"
+            ]
           }
         ]
       }
     },
     "/user/{id}": {
       "get": {
-        "tags": ["User"],
+        "tags": [
+          "User"
+        ],
         "description": "",
         "parameters": [
           {
@@ -211,7 +225,9 @@
         }
       },
       "put": {
-        "tags": ["User"],
+        "tags": [
+          "User"
+        ],
         "description": "",
         "parameters": [
           {
@@ -233,7 +249,9 @@
         }
       },
       "delete": {
-        "tags": ["User"],
+        "tags": [
+          "User"
+        ],
         "description": "",
         "parameters": [
           {
@@ -257,7 +275,9 @@
     },
     "/user/register": {
       "post": {
-        "tags": ["User"],
+        "tags": [
+          "User"
+        ],
         "description": "",
         "responses": {
           "200": {
@@ -303,7 +323,9 @@
     },
     "/user/login": {
       "post": {
-        "tags": ["User"],
+        "tags": [
+          "User"
+        ],
         "description": "",
         "responses": {
           "200": {
@@ -314,7 +336,9 @@
     },
     "/order/": {
       "get": {
-        "tags": ["Orders"],
+        "tags": [
+          "Orders"
+        ],
         "description": "",
         "responses": {
           "200": {
@@ -326,7 +350,9 @@
         }
       },
       "post": {
-        "tags": ["Orders"],
+        "tags": [
+          "Orders"
+        ],
         "summary": "Create Order record, with optional fields.",
         "description": "Create Order record, with optional fields.",
         "responses": {
@@ -356,7 +382,9 @@
     },
     "/order/{id}": {
       "get": {
-        "tags": ["Orders"],
+        "tags": [
+          "Orders"
+        ],
         "summary": "Get Order record by ID.",
         "description": "",
         "parameters": [
@@ -383,7 +411,9 @@
         }
       },
       "put": {
-        "tags": ["Orders"],
+        "tags": [
+          "Orders"
+        ],
         "summary": "Updated Order record, with optional fields.",
         "description": "",
         "parameters": [
@@ -413,7 +443,9 @@
         }
       },
       "delete": {
-        "tags": ["Orders"],
+        "tags": [
+          "Orders"
+        ],
         "summary": "Delete Order record.",
         "description": "",
         "parameters": [
@@ -442,7 +474,9 @@
     },
     "/order/user/{id}": {
       "get": {
-        "tags": ["Orders"],
+        "tags": [
+          "Orders"
+        ],
         "summary": "Get Order record by USER_ID.",
         "description": "",
         "parameters": [
@@ -471,8 +505,11 @@
     },
     "/inventory/": {
       "get": {
-        "tags": ["Inventory"],
-        "description": "",
+        "tags": [
+          "Inventory"
+        ],
+        "summary": "Get All Inventory records.",
+        "description": "Get All Inventory records.",
         "responses": {
           "200": {
             "description": "OK"
@@ -480,22 +517,46 @@
         }
       },
       "post": {
-        "tags": ["Inventory"],
-        "description": "",
+        "tags": [
+          "Inventory"
+        ],
+        "summary": "Create a new Inventory record.",
+        "description": "Create a new Inventory record.",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK: Inventory record was successfully created."
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized: You must be logged in with an Admin/Manager account."
+          },
+          "403": {
+            "description": "Forbidden: You must be logged in with an Admin/Manager account with the appropriate privileges."
+          },
+          "422": {
+            "description": "Unprocessable Entity: Data is not valid."
+          },
+          "500": {
+            "description": "Internal Server Error: Something happened on the server side while creating the Inventory record."
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/schemaInventoryRequired"
+              }
+            }
           }
         }
       }
     },
     "/inventory/{id}": {
       "get": {
-        "tags": ["Inventory"],
-        "description": "",
+        "tags": [
+          "Inventory"
+        ],
+        "summary": "Get inventory items by Object ID.",
+        "description": "Get inventory items by Object ID.",
         "parameters": [
           {
             "name": "id",
@@ -508,13 +569,25 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK: Inventory item was successfully received."
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Error: No inventory item found with id provided"
+          },
+          "500": {
+            "description": "Internal Server Error: Something happened on the server side while requesting the Inventory item."
           }
         }
       },
       "put": {
-        "tags": ["Inventory"],
-        "description": "",
+        "tags": [
+          "Inventory"
+        ],
+        "summary": "Update an Inventory record.",
+        "description": "Update an Inventory record.",
         "parameters": [
           {
             "name": "id",
@@ -527,16 +600,37 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK: Inventory record was successfully updated."
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized: You must be logged in with an Admin/Manager account."
+          },
+          "403": {
+            "description": "Forbidden: You must be logged in with an Admin/Manager account with the appropriate privileges."
+          },
+          "422": {
+            "description": "Unprocessable Entity: Data is not valid."
+          },
+          "500": {
+            "description": "Internal Server Error: Something happened on the server side while updating the Inventory record."
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/schemaInventoryOptional"
+              }
+            }
           }
         }
       },
       "delete": {
-        "tags": ["Inventory"],
-        "description": "",
+        "tags": [
+          "Inventory"
+        ],
+        "summary": "Delete an Inventory record.",
+        "description": "Delete an Inventory record.",
         "parameters": [
           {
             "name": "id",
@@ -549,10 +643,16 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK: Inventory record was successfully deleted."
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized: You must be logged in with an Admin/Manager account."
+          },
+          "403": {
+            "description": "Forbidden: You must be logged in with an Admin/Manager account with the appropriate privileges."
+          },
+          "500": {
+            "description": "Internal Server Error: Something happened on the server side while deleting the Inventory record."
           }
         }
       }
@@ -616,7 +716,12 @@
             "example": ""
           }
         },
-        "required": ["displayName", "fname", "email", "op_lvl"]
+        "required": [
+          "displayName",
+          "fname",
+          "email",
+          "op_lvl"
+        ]
       },
       "schemaAdminOptional": {
         "type": "object",
@@ -693,11 +798,17 @@
                   "example": ""
                 }
               },
-              "required": ["itemName", "amount"]
+              "required": [
+                "itemName",
+                "amount"
+              ]
             }
           }
         },
-        "required": ["user", "requests"]
+        "required": [
+          "user",
+          "requests"
+        ]
       },
       "schemaOrderOptional": {
         "type": "object",
@@ -724,9 +835,13 @@
           }
         }
       },
-      "schemaInventoryOptional": {
+      "schemaInventoryRequired": {
         "type": "object",
         "properties": {
+          "productName": {
+            "type": "string",
+            "example": ""
+          },
           "price": {
             "type": "string",
             "example": ""
@@ -735,7 +850,34 @@
             "type": "string",
             "example": ""
           },
-          "itemDescription": {
+          "description": {
+            "type": "string",
+            "example": ""
+          }
+        },
+        "required": [
+          "productName",
+          "price",
+          "stock",
+          "description"
+        ]
+      },
+      "schemaInventoryOptional": {
+        "type": "object",
+        "properties": {
+          "productName": {
+            "type": "string",
+            "example": ""
+          },
+          "price": {
+            "type": "string",
+            "example": ""
+          },
+          "stock": {
+            "type": "string",
+            "example": ""
+          },
+          "description": {
             "type": "string",
             "example": ""
           }

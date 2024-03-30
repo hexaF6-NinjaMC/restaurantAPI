@@ -2,24 +2,21 @@
  * Contains the <root>/inventory/ endpoints/requests.
  */
 
-const express = require("express");
-
-const router = express.Router();
+const router = require("express").Router();
 
 const invController = require("../controllers/inv");
-// const validation = require('../middleware/validation'); need help with this for JOI
+const {isValidId} = require("../middleware/validation");
 const { isAuthenticated } = require("../middleware/authenticate");
 
 // get all inventory
 router.get("/", invController.getAll);
 
 // get inventory by id
-router.get("/:id", /* validation.isValidId, */ invController.getById);
+router.get("/:id", isValidId, invController.getById);
 
 // create new inventory
 router.post(
-  "/",
-  /* validation.someSortOfRule, */ isAuthenticated,
+  "/", isAuthenticated,
   invController.createItem
 );
 

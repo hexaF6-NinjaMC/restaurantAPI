@@ -89,10 +89,17 @@ const doc = {
           }
         ]
       },
+      schemaInventoryRequired: {
+        $productName:"",
+        $price: "",
+        $stock: "",
+        $description: ""
+      },
       schemaInventoryOptional: {
+        productName: "",
         price: "",
         stock: "",
-        itemDescription: ""
+        description: ""
       }
     }
   }
