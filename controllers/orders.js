@@ -28,27 +28,63 @@ const getAll = async (req, res, next) => {
 
 const createOrder = async (req, res) => {
   // #swagger.tags = ['Orders']
-  res.status(200).json({ message: "Admin POST reuest" });
+  /* #swagger.requestBody = {
+    content: {
+      "application/json": {
+        schema: {
+          $ref: "#/components/schemas/schemaOrderRequired"
+        }
+      }
+    }
+  } */
+  // #swagger.summary = "Create Order record, with optional fields."
+  // #swagger.description = "Create Order record, with optional fields."
+  // #swagger.responses[200] = {description: "OK: Admin record was successfully created."}
+  // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
+  // #swagger.responses[422] = {description: "Unprocessable Entity: Data is not valid."}
+  // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while creating the Order record."}
+  res.status(200).json({ message: "Order POST request" });
 };
 
 const updateOrder = async (req, res) => {
   // #swagger.tags = ['Orders']
-  res.status(200).json({ message: "Admin PUT reuest" });
+  // #swagger.summary = "Updated Order record, with optional fields."
+  // #swagger.parameters["id"] = {description: "hexadecimal string 24 character"}
+  // #swagger.responses[200] = {description: "OK: Order record was successfully updated."}
+  // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
+  // #swagger.responses[422] = {description: "Unprocessable Entity: Data is not valid."}
+  // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while updating the Order record."}
+  res.status(200).json({ message: "Order PUT request" });
 };
 
 const deleteOrder = async (req, res) => {
   // #swagger.tags = ['Orders']
-  res.status(200).json({ message: "Admin DELETE reuest" });
+  // #swagger.summary = "Delete Order record."
+  // #swagger.parameters["id"] = {description: "hexadecimal string 24 character"}
+  // #swagger.responses[200] = {description: "OK: Order record was successfully deleted."}
+  // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
+  // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while deleting the Order record."}
+  res.status(200).json({ message: "Order DELETE request" });
 };
 
 const getOrderById = async (req, res) => {
   // #swagger.tags = ['Orders']
-  res.status(200).json({ message: "OrderById GET reuest" });
+  // #swagger.summary = "Get Order record by ID."
+  // #swagger.parameters["id"] = {description: "hexadecimal string 24 character"}
+  // #swagger.responses[200] = {description: "OK: Order record was successfully retrieved."}
+  // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
+  // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while obtaining the Order record."}
+  res.status(200).json({ message: "OrderById GET request" });
 };
 
 const getAllOrdersByUserId = async (req, res) => {
   // #swagger.tags = ['Orders']
-  res.status(200).json({ message: "AllOrdersByUserId GET reuest" });
+  // #swagger.summary = "Get Order record by USER_ID."
+  // #swagger.parameters["id"] = {description: "hexadecimal string 24 character"}
+  // #swagger.responses[200] = {description: "OK: Order record was successfully retrieved."}
+  // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
+  // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while obtaining the Order record."}
+  res.status(200).json({ message: "AllOrdersByUserId GET request" });
 };
 
 module.exports = {

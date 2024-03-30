@@ -327,13 +327,29 @@
       },
       "post": {
         "tags": ["Orders"],
-        "description": "",
+        "summary": "Create Order record, with optional fields.",
+        "description": "Create Order record, with optional fields.",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK: Admin record was successfully created."
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized: You must be logged in."
+          },
+          "422": {
+            "description": "Unprocessable Entity: Data is not valid."
+          },
+          "500": {
+            "description": "Internal Server Error: Something happened on the server side while creating the Order record."
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/schemaOrderRequired"
+              }
+            }
           }
         }
       }
@@ -341,6 +357,7 @@
     "/order/{id}": {
       "get": {
         "tags": ["Orders"],
+        "summary": "Get Order record by ID.",
         "description": "",
         "parameters": [
           {
@@ -349,17 +366,25 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "hexadecimal string 24 character"
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK: Order record was successfully retrieved."
+          },
+          "401": {
+            "description": "Unauthorized: You must be logged in."
+          },
+          "500": {
+            "description": "Internal Server Error: Something happened on the server side while obtaining the Order record."
           }
         }
       },
       "put": {
         "tags": ["Orders"],
+        "summary": "Updated Order record, with optional fields.",
         "description": "",
         "parameters": [
           {
@@ -368,20 +393,28 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "hexadecimal string 24 character"
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK: Order record was successfully updated."
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized: You must be logged in."
+          },
+          "422": {
+            "description": "Unprocessable Entity: Data is not valid."
+          },
+          "500": {
+            "description": "Internal Server Error: Something happened on the server side while updating the Order record."
           }
         }
       },
       "delete": {
         "tags": ["Orders"],
+        "summary": "Delete Order record.",
         "description": "",
         "parameters": [
           {
@@ -390,12 +423,19 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "hexadecimal string 24 character"
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK: Order record was successfully deleted."
+          },
+          "401": {
+            "description": "Unauthorized: You must be logged in."
+          },
+          "500": {
+            "description": "Internal Server Error: Something happened on the server side while deleting the Order record."
           }
         }
       }
@@ -403,6 +443,7 @@
     "/order/user/{id}": {
       "get": {
         "tags": ["Orders"],
+        "summary": "Get Order record by USER_ID.",
         "description": "",
         "parameters": [
           {
@@ -411,15 +452,19 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "hexadecimal string 24 character"
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK: Order record was successfully retrieved."
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized: You must be logged in."
+          },
+          "500": {
+            "description": "Internal Server Error: Something happened on the server side while obtaining the Order record."
           }
         }
       }
@@ -626,6 +671,33 @@
             "example": ""
           }
         }
+      },
+      "schemaOrderRequired": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "string",
+            "example": ""
+          },
+          "requests": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "itemName": {
+                  "type": "string",
+                  "example": ""
+                },
+                "amount": {
+                  "type": "string",
+                  "example": ""
+                }
+              },
+              "required": ["itemName", "amount"]
+            }
+          }
+        },
+        "required": ["user", "requests"]
       },
       "schemaOrderOptional": {
         "type": "object",

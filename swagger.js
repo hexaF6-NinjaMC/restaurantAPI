@@ -71,6 +71,15 @@ const doc = {
         email: "",
         profilePicURI: ""
       },
+      schemaOrderRequired: {
+        $user: "",
+        $requests: [
+          {
+            $itemName: "",
+            $amount: ""
+          }
+        ]
+      },
       schemaOrderOptional: {
         user: "",
         requests: [
