@@ -4,9 +4,17 @@
  */
 const { ObjectId } = require("mongodb");
 const mongodb = require("../data/database");
+const { createObjectId } = require("../helpers/utils");
+const { userSchema } = require("../helpers/validate");
 
 const getAll = async (req, res, next) => {
-  // #swagger.tags = ['User']
+  // #swagger.tags = ["User"]
+  // #swagger.summary = "Get All User records."
+  // #swagger.description = "Get All User records."
+  // #swagger.responses[200] = {description: "OK: User record was successfully created."}
+  // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
+  // #swagger.responses[403] = {description: "Forbidden: You must be logged in."}
+  // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while creating the User profile."}
   /* #swagger.security = [{
       "OAuthUser": [
         "read"
@@ -33,9 +41,19 @@ const getAll = async (req, res, next) => {
   }
 };
 
-const getUserById = async (req, res) => {
-  // #swagger.tags = ['User']
-  res.status(200).json({ message: "GET user by ID Endpoint" });
+const getUserById = async (req, res, next) => {
+  // #swagger.tags = ["User"]
+  // #swagger.summary = "Get User record by ID."
+  // #swagger.description = "Get User record by ID."
+  // #swagger.responses[200] = {description: "OK: User record was successfully created."}
+  // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
+  // #swagger.responses[403] = {description: "Forbidden: You must be logged in."}
+  // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while creating the User profile."}
+  /* #swagger.security = [{
+      "OAuthUser": [
+        "read"
+      ]
+  }] */
 
   // data validation for user ID
   if (!ObjectId.isValid(req.params.id)) {
@@ -55,47 +73,126 @@ const getUserById = async (req, res) => {
     }
     res.setHeader("Content-Type", "application/json");
     res.status(200).json(result);
-  } catch (error) {
-    console.error("Error fetching single user:", error);
-    res.status(500).json({ message: "Internal server error" });
+  } catch (err) {
+    next(err);
   }
 };
 
-const createUser = async (req, res) => {
-  // #swagger.tags = ['User']
-  const user = {
-    displayName: req.body.displayName,
-    fname: req.body.fname,
-    lname: req.body.lname,
-    profilePicURI: req.body.profilePicURI,
-    email: req.body.email,
-    creationDate: req.body.creationDate
-  };
-
-  res.status(200).json({ message: "User POST request" });
-
-  const response = await mongodb
-    .getDb()
-    .db()
-    .collection("users")
-    .insertOne(user);
-  if (response.acknowledged) {
-    res.status(200).send();
-  } else {
-    res
-      .status(500)
-      .json(response.error || "Something went wrong when adding a user.");
+const createUser = async (req, res, next) => {
+  // #swagger.tags = ["User"]
+  /* #swagger.requestBody = {
+    content: {
+      "application/json": {
+        schema: {
+          $ref: "#/components/schemas/schemaUserRequired"
+        }
+      }
+    }
+  } */
+  // #swagger.summary = "Create a new User record."
+  // #swagger.description = "Create a new User record."
+  // #swagger.responses[200] = {description: "OK: User record was successfully created."}
+  // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
+  // #swagger.responses[403] = {description: "Forbidden: You must be logged in."}
+  // #swagger.responses[422] = {description: "Unprocessable Entity: Data is not valid."}
+  // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while creating the User profile."}
+  try {
+    const user = {
+      displayName: req.body.displayName,
+      fname: req.body.fname,
+      lname: req.body.lname,
+      profilePicURI: req.body.profilePicURI,
+      email: req.body.email,
+      creationDate: new Date().toLocaleDateString()
+    };
+  
+    res.status(200).json({ message: "User POST request" });
+  
+    const response = await mongodb
+      .getDb()
+      .db()
+      .collection("users")
+      .insertOne(user);
+    if (response.acknowledged) {
+      res.status(200).send();
+    } else {
+      res
+        .status(500)
+        .json(response.error || "Something went wrong when adding a user.");
+    }
+  } catch (err) {
+    if (err.isJoi === true) err.status = 422;
+    next(err);
   }
 };
 
-const updateUser = async (req, res) => {
-  // #swagger.tags = ['User']
-  res.status(200).json({ message: "User PUT reuest" });
+const updateUser = async (req, res, next) => {
+  // TODO: implement user creation, permission handling for op-lvl 1
+  // #swagger.tags = ["User"]
+  /* #swagger.requestBody = {
+    content: {
+      "application/json": {
+        schema: {
+          $ref: "#/components/schemas/schemaUserOptional"
+        }
+      }
+    }
+  } */
+  // #swagger.summary = "Update User record, ref'd by _id, with optional fields."
+  // #swagger.description = "Update User record, ref'd by _id, with optional fields."
+  // #swagger.responses[200] = {description: "OK: User record was successfully updated."}
+  // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
+  // #swagger.responses[403] = {description: "Forbidden: You must be logged in."}
+  // #swagger.responses[422] = {description: "Unprocessable Entity: Data is not valid."}
+  // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while creating the User profile."}
+  try {
+    const ID = createObjectId(req.params.id);
+
+    const user = {
+      displayName: req.body.displayName,
+      fname: req.body.fname,
+      lname: req.body.lname,
+      profilePicURI: req.body.profilePicURI,
+      email: req.body.email,
+      creationDate: new Date().toLocaleDateString()
+    };
+    const userData = await userSchema.validateAsync(user);
+    const result = await mongodb.getDb().db().collection("users").findOneAndUpdate(
+      { _id: ID },
+      {
+        $set: userData
+      },
+      {
+        returnDocument: "after"
+      }
+    );
+    res.setHeader("Content-Type", "application/json");
+    res.status(200).json(result);
+  } catch (err) {
+    if (err.isJoi === true) err.status = 422;
+    next(err);
+  }
 };
 
 const deleteUser = async (req, res) => {
-  // #swagger.tags = ['User']
-  res.status(200).json({ message: "User DELETE reuest" });
+  // #swagger.tags = ["User"]
+  // #swagger.summary = "Delete User record, ref'd by _id, with optional fields."
+  // #swagger.description = "Delete User record, ref'd by _id, with optional fields."
+  // #swagger.responses[200] = {description: "OK: User record was successfully created."}
+  // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
+  // #swagger.responses[403] = {description: "Forbidden: You must be logged in."}
+  // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while deleting the User profile."}
+  if (!ObjectId.isValid(req.params.id)) {
+    res.status(400).json("Must be a valid user ID");
+  }
+
+  const userId = new ObjectId(req.params.id);
+  const response = await mongodb.getDb().db().collection("users").deleteOne({ _id: userId }, true);
+  if (response.deletedCount > 0) {
+    res.status(204).send();
+  } else {
+    res.status(500).json(response.error || "Something went wrong deleting the user.");
+  }
 };
 
 const login = async (req, res) => {

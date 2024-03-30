@@ -18,7 +18,9 @@
   "paths": {
     "/admin/": {
       "get": {
-        "tags": ["Admin"],
+        "tags": [
+          "Admin"
+        ],
         "summary": "Get All Admin (lvl 1) or Manager (lvl 2) records.",
         "description": "Get All Admin (lvl 1) or Manager (lvl 2) records.",
         "parameters": [
@@ -50,7 +52,9 @@
         }
       },
       "post": {
-        "tags": ["Admin"],
+        "tags": [
+          "Admin"
+        ],
         "summary": "Create a new Admin (lvl 1 or 2) record.",
         "description": "Create a new Admin (lvl 1 or 2) record.",
         "responses": {
@@ -83,7 +87,9 @@
     },
     "/admin/{id}": {
       "put": {
-        "tags": ["Admin"],
+        "tags": [
+          "Admin"
+        ],
         "summary": "Update Admin/Manager record, ref'd by _id, with optional fields.",
         "description": "Update Admin/Manager record, ref'd by _id, with optional fields.",
         "parameters": [
@@ -127,7 +133,9 @@
         }
       },
       "delete": {
-        "tags": ["Admin"],
+        "tags": [
+          "Admin"
+        ],
         "summary": "Delete Admin/Manager record, ref'd by _id, with optional fields.",
         "description": "Delete Admin/Manager record, ref'd by _id, with optional fields.",
         "parameters": [
@@ -161,160 +169,188 @@
     },
     "/user/": {
       "get": {
-        "tags": ["User"],
-        "description": "",
+        "tags": [
+          "User"
+        ],
+        "summary": "Get All User records.",
+        "description": "Get All User records.",
+        "parameters": [
+          
+        ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK: User record was successfully created."
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized: You must be logged in."
+          },
+          "403": {
+            "description": "Forbidden: You must be logged in."
+          },
+          "500": {
+            "description": "Internal Server Error: Something happened on the server side while creating the User profile."
           }
         },
         "security": [
           {
-            "OAuthUser": ["read"]
+            "OAuthUser": [
+              "read"
+            ]
           }
         ]
-      }
-    },
-    "/user/{id}": {
-      "get": {
-        "tags": ["User"],
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
       },
-      "put": {
-        "tags": ["User"],
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          }
-        }
-      },
-      "delete": {
-        "tags": ["User"],
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          }
-        }
-      }
-    },
-    "/user/register": {
       "post": {
-        "tags": ["User"],
-        "description": "",
+        "tags": [
+          "User"
+        ],
+        "summary": "Create a new User record.",
+        "description": "Create a new User record.",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK: User record was successfully created."
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized: You must be logged in."
+          },
+          "403": {
+            "description": "Forbidden: You must be logged in."
+          },
+          "422": {
+            "description": "Unprocessable Entity: Data is not valid."
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal Server Error: Something happened on the server side while creating the User profile."
           }
         },
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "displayName": {
-                    "example": "any"
-                  },
-                  "fname": {
-                    "example": "any"
-                  },
-                  "lname": {
-                    "example": "any"
-                  },
-                  "profilePicURI": {
-                    "example": "any"
-                  },
-                  "email": {
-                    "example": "any"
-                  },
-                  "creationDate": {
-                    "example": "any"
-                  }
-                }
+                "$ref": "#/components/schemas/schemaUserRequired"
               }
             }
           }
         }
       }
     },
-    "/user/login": {
-      "post": {
-        "tags": ["User"],
+    "/user/{id}": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Get User record by ID.",
+        "description": "Get User record by ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: User record was successfully created."
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized: You must be logged in."
+          },
+          "403": {
+            "description": "Forbidden: You must be logged in."
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error: Something happened on the server side while creating the User profile."
+          }
+        },
+        "security": [
+          {
+            "OAuthUser": [
+              "read"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Update User record, ref'd by _id, with optional fields.",
+        "description": "Update User record, ref'd by _id, with optional fields.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: User record was successfully updated."
+          },
+          "401": {
+            "description": "Unauthorized: You must be logged in."
+          },
+          "403": {
+            "description": "Forbidden: You must be logged in."
+          },
+          "422": {
+            "description": "Unprocessable Entity: Data is not valid."
+          },
+          "500": {
+            "description": "Internal Server Error: Something happened on the server side while creating the User profile."
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/schemaUserOptional"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "User"
+        ],
         "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       }
     },
     "/order/": {
       "get": {
-        "tags": ["Orders"],
+        "tags": [
+          "Orders"
+        ],
         "description": "",
         "responses": {
           "200": {
@@ -326,7 +362,9 @@
         }
       },
       "post": {
-        "tags": ["Orders"],
+        "tags": [
+          "Orders"
+        ],
         "summary": "Create Order record, with optional fields.",
         "description": "Create Order record, with optional fields.",
         "responses": {
@@ -356,7 +394,9 @@
     },
     "/order/{id}": {
       "get": {
-        "tags": ["Orders"],
+        "tags": [
+          "Orders"
+        ],
         "summary": "Get Order record by ID.",
         "description": "",
         "parameters": [
@@ -383,7 +423,9 @@
         }
       },
       "put": {
-        "tags": ["Orders"],
+        "tags": [
+          "Orders"
+        ],
         "summary": "Updated Order record, with optional fields.",
         "description": "",
         "parameters": [
@@ -413,7 +455,9 @@
         }
       },
       "delete": {
-        "tags": ["Orders"],
+        "tags": [
+          "Orders"
+        ],
         "summary": "Delete Order record.",
         "description": "",
         "parameters": [
@@ -442,7 +486,9 @@
     },
     "/order/user/{id}": {
       "get": {
-        "tags": ["Orders"],
+        "tags": [
+          "Orders"
+        ],
         "summary": "Get Order record by USER_ID.",
         "description": "",
         "parameters": [
@@ -471,7 +517,9 @@
     },
     "/inventory/": {
       "get": {
-        "tags": ["Inventory"],
+        "tags": [
+          "Inventory"
+        ],
         "description": "",
         "responses": {
           "200": {
@@ -480,7 +528,9 @@
         }
       },
       "post": {
-        "tags": ["Inventory"],
+        "tags": [
+          "Inventory"
+        ],
         "description": "",
         "responses": {
           "200": {
@@ -494,7 +544,9 @@
     },
     "/inventory/{id}": {
       "get": {
-        "tags": ["Inventory"],
+        "tags": [
+          "Inventory"
+        ],
         "description": "",
         "parameters": [
           {
@@ -513,7 +565,9 @@
         }
       },
       "put": {
-        "tags": ["Inventory"],
+        "tags": [
+          "Inventory"
+        ],
         "description": "",
         "parameters": [
           {
@@ -535,7 +589,9 @@
         }
       },
       "delete": {
-        "tags": ["Inventory"],
+        "tags": [
+          "Inventory"
+        ],
         "description": "",
         "parameters": [
           {
@@ -616,7 +672,12 @@
             "example": ""
           }
         },
-        "required": ["displayName", "fname", "email", "op_lvl"]
+        "required": [
+          "displayName",
+          "fname",
+          "email",
+          "op_lvl"
+        ]
       },
       "schemaAdminOptional": {
         "type": "object",
@@ -693,11 +754,17 @@
                   "example": ""
                 }
               },
-              "required": ["itemName", "amount"]
+              "required": [
+                "itemName",
+                "amount"
+              ]
             }
           }
         },
-        "required": ["user", "requests"]
+        "required": [
+          "user",
+          "requests"
+        ]
       },
       "schemaOrderOptional": {
         "type": "object",
