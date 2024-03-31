@@ -161,13 +161,7 @@
     },
     "/user/": {
       "get": {
-<<<<<<< HEAD
         "tags": ["User"],
-=======
-        "tags": [
-          "User"
-        ],
->>>>>>> dbcad0246f937d8018ea7fcdfa628c1f19cf2aba
         "summary": "Get All User records.",
         "description": "Get All User records.",
         "responses": {
@@ -183,12 +177,7 @@
           "500": {
             "description": "Internal Server Error: Something happened on the server side while creating the User profile."
           }
-        },
-        "security": [
-          {
-            "OAuthUser": ["read"]
-          }
-        ]
+        }
       },
       "post": {
         "tags": ["User"],
@@ -224,13 +213,7 @@
     },
     "/user/{id}": {
       "get": {
-<<<<<<< HEAD
         "tags": ["User"],
-=======
-        "tags": [
-          "User"
-        ],
->>>>>>> dbcad0246f937d8018ea7fcdfa628c1f19cf2aba
         "summary": "Get User record by ID.",
         "description": "Get User record by ID.",
         "parameters": [
@@ -262,21 +245,10 @@
           "500": {
             "description": "Internal Server Error: Something happened on the server side while creating the User profile."
           }
-        },
-        "security": [
-          {
-            "OAuthUser": ["read"]
-          }
-        ]
+        }
       },
       "put": {
-<<<<<<< HEAD
         "tags": ["User"],
-=======
-        "tags": [
-          "User"
-        ],
->>>>>>> dbcad0246f937d8018ea7fcdfa628c1f19cf2aba
         "summary": "Update User record, ref'd by _id, with optional fields.",
         "description": "Update User record, ref'd by _id, with optional fields.",
         "parameters": [
@@ -317,13 +289,7 @@
         }
       },
       "delete": {
-<<<<<<< HEAD
         "tags": ["User"],
-=======
-        "tags": [
-          "User"
-        ],
->>>>>>> dbcad0246f937d8018ea7fcdfa628c1f19cf2aba
         "summary": "Delete User record, ref'd by _id, with optional fields.",
         "description": "Delete User record, ref'd by _id, with optional fields.",
         "parameters": [
@@ -521,13 +487,7 @@
     },
     "/inventory/": {
       "get": {
-<<<<<<< HEAD
         "tags": ["Inventory"],
-=======
-        "tags": [
-          "Inventory"
-        ],
->>>>>>> dbcad0246f937d8018ea7fcdfa628c1f19cf2aba
         "summary": "Get All Inventory records.",
         "description": "Get All Inventory records.",
         "responses": {
@@ -537,13 +497,7 @@
         }
       },
       "post": {
-<<<<<<< HEAD
         "tags": ["Inventory"],
-=======
-        "tags": [
-          "Inventory"
-        ],
->>>>>>> dbcad0246f937d8018ea7fcdfa628c1f19cf2aba
         "summary": "Create a new Inventory record.",
         "description": "Create a new Inventory record.",
         "responses": {
@@ -576,13 +530,7 @@
     },
     "/inventory/{id}": {
       "get": {
-<<<<<<< HEAD
         "tags": ["Inventory"],
-=======
-        "tags": [
-          "Inventory"
-        ],
->>>>>>> dbcad0246f937d8018ea7fcdfa628c1f19cf2aba
         "summary": "Get inventory items by Object ID.",
         "description": "Get inventory items by Object ID.",
         "parameters": [
@@ -611,13 +559,7 @@
         }
       },
       "put": {
-<<<<<<< HEAD
         "tags": ["Inventory"],
-=======
-        "tags": [
-          "Inventory"
-        ],
->>>>>>> dbcad0246f937d8018ea7fcdfa628c1f19cf2aba
         "summary": "Update an Inventory record.",
         "description": "Update an Inventory record.",
         "parameters": [
@@ -658,13 +600,7 @@
         }
       },
       "delete": {
-<<<<<<< HEAD
         "tags": ["Inventory"],
-=======
-        "tags": [
-          "Inventory"
-        ],
->>>>>>> dbcad0246f937d8018ea7fcdfa628c1f19cf2aba
         "summary": "Delete an Inventory record.",
         "description": "Delete an Inventory record.",
         "parameters": [

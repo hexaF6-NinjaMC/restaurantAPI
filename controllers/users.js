@@ -15,11 +15,6 @@ const getAll = async (req, res, next) => {
   // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
   // #swagger.responses[403] = {description: "Forbidden: You must be logged in."}
   // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while creating the User profile."}
-  /* #swagger.security = [{
-      "OAuthUser": [
-        "read"
-      ]
-  }] */
   try {
     const result = await mongodb
       .getDb()
@@ -49,11 +44,6 @@ const getUserById = async (req, res, next) => {
   // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
   // #swagger.responses[403] = {description: "Forbidden: You must be logged in."}
   // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while creating the User profile."}
-  /* #swagger.security = [{
-      "OAuthUser": [
-        "read"
-      ]
-  }] */
 
   // data validation for user ID
   if (!ObjectId.isValid(req.params.id)) {
@@ -103,7 +93,7 @@ const createUser = async (req, res, next) => {
       lname: req.body.lname,
       profilePicURI: req.body.profilePicURI,
       email: req.body.email,
-      creationDate: new Date().toLocaleDateString(),
+      creationDate: new Date().toLocaleDateString()
     };
 
     const response = await mongodb
@@ -152,7 +142,7 @@ const updateUser = async (req, res, next) => {
       lname: req.body.lname,
       profilePicURI: req.body.profilePicURI,
       email: req.body.email,
-      creationDate: new Date().toLocaleDateString(),
+      creationDate: new Date().toLocaleDateString()
     };
     const userData = await userSchema.validateAsync(user);
     const result = await mongodb
@@ -162,10 +152,10 @@ const updateUser = async (req, res, next) => {
       .findOneAndUpdate(
         { _id: ID },
         {
-          $set: userData,
+          $set: userData
         },
         {
-          returnDocument: "after",
+          returnDocument: "after"
         }
       );
     res.setHeader("Content-Type", "application/json");
@@ -214,5 +204,5 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser,
-  login,
+  login
 };
