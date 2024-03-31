@@ -122,10 +122,18 @@ const userSchema = Joi.object().keys({
   creationDate: Joi.string().optional().trim()
 });
 
-const inventorySchema = Joi.object().keys({
+const inventoryPOSTSchema = Joi.object().keys({
   productName: Joi.string().trim().required(),
   description: Joi.string().trim().required(),
-  price: Joi.number().required()
+  price: Joi.number().integer().required(),
+  stock: Joi.number().integer().required()
+});
+
+const inventoryPUTSchema = Joi.object().keys({
+  productName: Joi.string().empty("").trim(),
+  description: Joi.string().empty("").trim(),
+  price: Joi.number().integer().empty(""),
+  stock: Joi.number().integer().empty("")
 });
 
 const orderSchema = Joi.object().keys({
@@ -148,6 +156,7 @@ module.exports = {
   adminPOSTSchema,
   adminPUTSchema,
   userSchema,
-  inventorySchema,
+  inventoryPOSTSchema,
+  inventoryPUTSchema,
   orderSchema
 };

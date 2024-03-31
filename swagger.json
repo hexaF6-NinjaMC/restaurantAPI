@@ -169,14 +169,8 @@
     },
     "/user/": {
       "get": {
-        "tags": [
-          "User"
-        ],
-        "summary": "Get All User records.",
-        "description": "Get All User records.",
-        "parameters": [
-          
-        ],
+        "tags": ["User"],
+        "description": "",
         "responses": {
           "200": {
             "description": "OK: User record was successfully created."
@@ -235,11 +229,8 @@
     },
     "/user/{id}": {
       "get": {
-        "tags": [
-          "User"
-        ],
-        "summary": "Get User record by ID.",
-        "description": "Get User record by ID.",
+        "tags": ["User"],
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -279,11 +270,8 @@
         ]
       },
       "put": {
-        "tags": [
-          "User"
-        ],
-        "summary": "Update User record, ref'd by _id, with optional fields.",
-        "description": "Update User record, ref'd by _id, with optional fields.",
+        "tags": ["User"],
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -342,6 +330,63 @@
           },
           "401": {
             "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/user/register": {
+      "post": {
+        "tags": ["User"],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "displayName": {
+                    "example": "any"
+                  },
+                  "fname": {
+                    "example": "any"
+                  },
+                  "lname": {
+                    "example": "any"
+                  },
+                  "profilePicURI": {
+                    "example": "any"
+                  },
+                  "email": {
+                    "example": "any"
+                  },
+                  "creationDate": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/login": {
+      "post": {
+        "tags": ["User"],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -517,9 +562,7 @@
     },
     "/inventory/": {
       "get": {
-        "tags": [
-          "Inventory"
-        ],
+        "tags": ["Inventory"],
         "description": "",
         "responses": {
           "200": {
@@ -528,25 +571,39 @@
         }
       },
       "post": {
-        "tags": [
-          "Inventory"
-        ],
+        "tags": ["Inventory"],
         "description": "",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK: Inventory record was successfully created."
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized: You must be logged in with an Admin/Manager account."
+          },
+          "403": {
+            "description": "Forbidden: You must be logged in with an Admin/Manager account with the appropriate privileges."
+          },
+          "422": {
+            "description": "Unprocessable Entity: Data is not valid."
+          },
+          "500": {
+            "description": "Internal Server Error: Something happened on the server side while creating the Inventory record."
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/schemaInventoryRequired"
+              }
+            }
           }
         }
       }
     },
     "/inventory/{id}": {
       "get": {
-        "tags": [
-          "Inventory"
-        ],
+        "tags": ["Inventory"],
         "description": "",
         "parameters": [
           {
@@ -560,14 +617,21 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK: Inventory item was successfully received."
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Error: No inventory item found with id provided"
+          },
+          "500": {
+            "description": "Internal Server Error: Something happened on the server side while requesting the Inventory item."
           }
         }
       },
       "put": {
-        "tags": [
-          "Inventory"
-        ],
+        "tags": ["Inventory"],
         "description": "",
         "parameters": [
           {
@@ -581,17 +645,33 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK: Inventory record was successfully updated."
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized: You must be logged in with an Admin/Manager account."
+          },
+          "403": {
+            "description": "Forbidden: You must be logged in with an Admin/Manager account with the appropriate privileges."
+          },
+          "422": {
+            "description": "Unprocessable Entity: Data is not valid."
+          },
+          "500": {
+            "description": "Internal Server Error: Something happened on the server side while updating the Inventory record."
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/schemaInventoryOptional"
+              }
+            }
           }
         }
       },
       "delete": {
-        "tags": [
-          "Inventory"
-        ],
+        "tags": ["Inventory"],
         "description": "",
         "parameters": [
           {
@@ -605,10 +685,16 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK: Inventory record was successfully deleted."
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized: You must be logged in with an Admin/Manager account."
+          },
+          "403": {
+            "description": "Forbidden: You must be logged in with an Admin/Manager account with the appropriate privileges."
+          },
+          "500": {
+            "description": "Internal Server Error: Something happened on the server side while deleting the Inventory record."
           }
         }
       }
@@ -791,9 +877,13 @@
           }
         }
       },
-      "schemaInventoryOptional": {
+      "schemaInventoryRequired": {
         "type": "object",
         "properties": {
+          "productName": {
+            "type": "string",
+            "example": ""
+          },
           "price": {
             "type": "string",
             "example": ""
@@ -802,7 +892,34 @@
             "type": "string",
             "example": ""
           },
-          "itemDescription": {
+          "description": {
+            "type": "string",
+            "example": ""
+          }
+        },
+        "required": [
+          "productName",
+          "price",
+          "stock",
+          "description"
+        ]
+      },
+      "schemaInventoryOptional": {
+        "type": "object",
+        "properties": {
+          "productName": {
+            "type": "string",
+            "example": ""
+          },
+          "price": {
+            "type": "string",
+            "example": ""
+          },
+          "stock": {
+            "type": "string",
+            "example": ""
+          },
+          "description": {
             "type": "string",
             "example": ""
           }
