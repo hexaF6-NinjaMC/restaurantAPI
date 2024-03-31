@@ -64,7 +64,7 @@ const getUserById = async (req, res, next) => {
     const userId = new ObjectId(req.params.id);
     const result = await mongodb
       .getDb()
-      .db()
+      .db("Restaurant")
       .collection("users")
       .findOne({ _id: userId });
 
@@ -103,14 +103,12 @@ const createUser = async (req, res, next) => {
       lname: req.body.lname,
       profilePicURI: req.body.profilePicURI,
       email: req.body.email,
-      creationDate: new Date().toLocaleDateString()
+      creationDate: new Date().toLocaleDateString(),
     };
-
-    res.status(200).json({ message: "User POST request" });
 
     const response = await mongodb
       .getDb()
-      .db()
+      .db("Restaurant")
       .collection("users")
       .insertOne(user);
     if (response.acknowledged) {
@@ -154,20 +152,20 @@ const updateUser = async (req, res, next) => {
       lname: req.body.lname,
       profilePicURI: req.body.profilePicURI,
       email: req.body.email,
-      creationDate: new Date().toLocaleDateString()
+      creationDate: new Date().toLocaleDateString(),
     };
     const userData = await userSchema.validateAsync(user);
     const result = await mongodb
       .getDb()
-      .db()
+      .db("Restaurant")
       .collection("users")
       .findOneAndUpdate(
         { _id: ID },
         {
-          $set: userData
+          $set: userData,
         },
         {
-          returnDocument: "after"
+          returnDocument: "after",
         }
       );
     res.setHeader("Content-Type", "application/json");
@@ -216,5 +214,5 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser,
-  login
+  login,
 };
