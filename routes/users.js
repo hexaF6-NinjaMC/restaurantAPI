@@ -13,29 +13,15 @@ const { isAuthenticated } = require("../middleware/authenticate"); // could use 
 router.get("/", isAuthenticated, usersController.getAll);
 
 // Get user by id
-router.get(
-  "/:id", isAuthenticated, usersController.getUserById);
+router.get("/:id", isAuthenticated, usersController.getUserById);
 
-
-router.post(
-  "/",
-  isAuthenticated,
-  usersController.createUser
-);
+router.post("/", isAuthenticated, usersController.createUser);
 
 // Update user if authenticated as admin or user
-router.put(
-  "/:id",
-  isAuthenticated,
-  usersController.updateUser
-);
+router.put("/:id", isAuthenticated, usersController.updateUser);
 
 // Delete user by ID
-router.delete(
-  "/:id",
-  isAuthenticated,
-  usersController.deleteUser
-);
+router.delete("/:id", isAuthenticated, usersController.deleteUser);
 
 // /**
 //  * ~Aaron: consider removing from routes, as OAuth2 is implemented through <root>/auth/*. Or,

@@ -5,7 +5,7 @@
 const router = require("express").Router();
 
 const invController = require("../controllers/inv");
-const {isValidId} = require("../middleware/validation");
+const { isValidId } = require("../middleware/validation");
 const { isAuthenticated } = require("../middleware/authenticate");
 
 // get all inventory
@@ -15,10 +15,7 @@ router.get("/", invController.getAll);
 router.get("/:id", isValidId, invController.getById);
 
 // create new inventory
-router.post(
-  "/", isAuthenticated,
-  invController.createItem
-);
+router.post("/", isAuthenticated, invController.createItem);
 
 // update inventory
 router.put(

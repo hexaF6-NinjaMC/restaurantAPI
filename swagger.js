@@ -72,13 +72,9 @@ const doc = {
         profilePicURI: ""
       },
       schemaOrderRequired: {
-        $user: "",
-        $requests: [
-          {
-            $itemName: "",
-            $amount: ""
-          }
-        ]
+        $userID: "",
+        $itemName: "",
+        $amount: ""
       },
       schemaOrderOptional: {
         user: "",
@@ -90,7 +86,7 @@ const doc = {
         ]
       },
       schemaInventoryRequired: {
-        $productName:"",
+        $productName: "",
         $price: "",
         $stock: "",
         $description: ""

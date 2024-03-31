@@ -2,9 +2,15 @@
 // - AUSTIN
 
 const mongodb = require("../data/database");
+const { orderSchema } = require("../helpers/validate");
 
 const getAll = async (req, res, next) => {
   // #swagger.tags = ['Orders']
+  // #swagger.summary = "Get All Order records."
+  // #swagger.description = "Get All Order records."
+  // #swagger.responses[200] = {description: "OK: Order records were successfully pulled."}
+  // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
+  // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while pulling the Order record."}
   try {
     const result = await mongodb
       .getDb()
@@ -26,7 +32,7 @@ const getAll = async (req, res, next) => {
   }
 };
 
-const createOrder = async (req, res) => {
+const createOrder = async (req, res, next) => {
   // #swagger.tags = ['Orders']
   /* #swagger.requestBody = {
     content: {
@@ -39,11 +45,31 @@ const createOrder = async (req, res) => {
   } */
   // #swagger.summary = "Create Order record, with optional fields."
   // #swagger.description = "Create Order record, with optional fields."
-  // #swagger.responses[200] = {description: "OK: Admin record was successfully created."}
+  // #swagger.responses[200] = {description: "OK: Order record was successfully created."}
   // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
   // #swagger.responses[422] = {description: "Unprocessable Entity: Data is not valid."}
   // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while creating the Order record."}
-  res.status(200).json({ message: "Order POST request" });
+  try {
+    const orders = {
+      userID: req.body.userID,
+      itemName: req.body.itemName,
+      amount: req.body.amount
+    };
+
+    // Validate
+    const orderData = await orderSchema.validateAsync(orders);
+
+    const response = await mongodb
+      .getDb()
+      .db("Restaurant")
+      .collection("order")
+      .insertOne(orderData);
+    res.setHeader("Content-Type", "application/json");
+    res.status(200).json(response);
+  } catch (err) {
+    if (err.isJoi === true) err.status = 422;
+    next(err);
+  }
 };
 
 const updateOrder = async (req, res) => {

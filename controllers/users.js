@@ -105,9 +105,9 @@ const createUser = async (req, res, next) => {
       email: req.body.email,
       creationDate: new Date().toLocaleDateString()
     };
-  
+
     res.status(200).json({ message: "User POST request" });
-  
+
     const response = await mongodb
       .getDb()
       .db()
@@ -157,15 +157,19 @@ const updateUser = async (req, res, next) => {
       creationDate: new Date().toLocaleDateString()
     };
     const userData = await userSchema.validateAsync(user);
-    const result = await mongodb.getDb().db().collection("users").findOneAndUpdate(
-      { _id: ID },
-      {
-        $set: userData
-      },
-      {
-        returnDocument: "after"
-      }
-    );
+    const result = await mongodb
+      .getDb()
+      .db()
+      .collection("users")
+      .findOneAndUpdate(
+        { _id: ID },
+        {
+          $set: userData
+        },
+        {
+          returnDocument: "after"
+        }
+      );
     res.setHeader("Content-Type", "application/json");
     res.status(200).json(result);
   } catch (err) {
@@ -187,11 +191,17 @@ const deleteUser = async (req, res) => {
   }
 
   const userId = new ObjectId(req.params.id);
-  const response = await mongodb.getDb().db().collection("users").deleteOne({ _id: userId }, true);
+  const response = await mongodb
+    .getDb()
+    .db()
+    .collection("users")
+    .deleteOne({ _id: userId }, true);
   if (response.deletedCount > 0) {
     res.status(204).send();
   } else {
-    res.status(500).json(response.error || "Something went wrong deleting the user.");
+    res
+      .status(500)
+      .json(response.error || "Something went wrong deleting the user.");
   }
 };
 

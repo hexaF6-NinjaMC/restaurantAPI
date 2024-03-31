@@ -101,7 +101,7 @@ const deleteItem = async (req, res) => {
   res.status(200).json({ message: "Inventory DELETE request" });
 };
 
-const getById = async (req, res, next)=> {
+const getById = async (req, res, next) => {
   // #swagger.tags = ['Inventory']
   // #swagger.summary = "Get inventory items by Object ID."
   // #swagger.description = "Get inventory items by Object ID."
@@ -110,10 +110,11 @@ const getById = async (req, res, next)=> {
   // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while requesting the Inventory item."}
   try {
     const ID = createObjectId(req.params.id);
-    const result = await mongodb.getDatabase()
+    const result = await mongodb
+      .getDatabase()
       .db("Restaurant")
       .collection("inventory")
-      .find({ _id: ID});
+      .find({ _id: ID });
     result.toArray().then((invArr) => {
       if (invArr.length === 0) {
         res.status(404).json(`No inventory item found with id ${ID}`);

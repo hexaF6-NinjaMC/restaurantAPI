@@ -18,9 +18,7 @@
   "paths": {
     "/admin/": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "summary": "Get All Admin (lvl 1) or Manager (lvl 2) records.",
         "description": "Get All Admin (lvl 1) or Manager (lvl 2) records.",
         "parameters": [
@@ -52,9 +50,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "summary": "Create a new Admin (lvl 1 or 2) record.",
         "description": "Create a new Admin (lvl 1 or 2) record.",
         "responses": {
@@ -87,9 +83,7 @@
     },
     "/admin/{id}": {
       "put": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "summary": "Update Admin/Manager record, ref'd by _id, with optional fields.",
         "description": "Update Admin/Manager record, ref'd by _id, with optional fields.",
         "parameters": [
@@ -133,9 +127,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "summary": "Delete Admin/Manager record, ref'd by _id, with optional fields.",
         "description": "Delete Admin/Manager record, ref'd by _id, with optional fields.",
         "parameters": [
@@ -170,7 +162,8 @@
     "/user/": {
       "get": {
         "tags": ["User"],
-        "description": "",
+        "summary": "Get All User records.",
+        "description": "Get All User records.",
         "responses": {
           "200": {
             "description": "OK: User record was successfully created."
@@ -187,16 +180,12 @@
         },
         "security": [
           {
-            "OAuthUser": [
-              "read"
-            ]
+            "OAuthUser": ["read"]
           }
         ]
       },
       "post": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "summary": "Create a new User record.",
         "description": "Create a new User record.",
         "responses": {
@@ -230,7 +219,8 @@
     "/user/{id}": {
       "get": {
         "tags": ["User"],
-        "description": "",
+        "summary": "Get User record by ID.",
+        "description": "Get User record by ID.",
         "parameters": [
           {
             "name": "id",
@@ -263,15 +253,14 @@
         },
         "security": [
           {
-            "OAuthUser": [
-              "read"
-            ]
+            "OAuthUser": ["read"]
           }
         ]
       },
       "put": {
         "tags": ["User"],
-        "description": "",
+        "summary": "Update User record, ref'd by _id, with optional fields.",
+        "description": "Update User record, ref'd by _id, with optional fields.",
         "parameters": [
           {
             "name": "id",
@@ -310,10 +299,9 @@
         }
       },
       "delete": {
-        "tags": [
-          "User"
-        ],
-        "description": "",
+        "tags": ["User"],
+        "summary": "Delete User record, ref'd by _id, with optional fields.",
+        "description": "Delete User record, ref'd by _id, with optional fields.",
         "parameters": [
           {
             "name": "id",
@@ -326,95 +314,50 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK: User record was successfully created."
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "401": {
-            "description": "Unauthorized"
-          }
-        }
-      }
-    },
-    "/user/register": {
-      "post": {
-        "tags": ["User"],
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
+            "description": "Unauthorized: You must be logged in."
           },
-          "401": {
-            "description": "Unauthorized"
+          "403": {
+            "description": "Forbidden: You must be logged in."
           },
           "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "displayName": {
-                    "example": "any"
-                  },
-                  "fname": {
-                    "example": "any"
-                  },
-                  "lname": {
-                    "example": "any"
-                  },
-                  "profilePicURI": {
-                    "example": "any"
-                  },
-                  "email": {
-                    "example": "any"
-                  },
-                  "creationDate": {
-                    "example": "any"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/user/login": {
-      "post": {
-        "tags": ["User"],
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
+            "description": "Internal Server Error: Something happened on the server side while deleting the User profile."
           }
         }
       }
     },
     "/order/": {
       "get": {
-        "tags": [
-          "Orders"
-        ],
-        "description": "",
+        "tags": ["Orders"],
+        "summary": "Get All Order records.",
+        "description": "Get All Order records.",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK: Order records were successfully pulled."
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized: You must be logged in."
+          },
+          "500": {
+            "description": "Internal Server Error: Something happened on the server side while pulling the Order record."
           }
         }
       },
       "post": {
-        "tags": [
-          "Orders"
-        ],
+        "tags": ["Orders"],
         "summary": "Create Order record, with optional fields.",
         "description": "Create Order record, with optional fields.",
         "responses": {
           "200": {
-            "description": "OK: Admin record was successfully created."
+            "description": "OK: Order record was successfully created."
           },
           "401": {
             "description": "Unauthorized: You must be logged in."
@@ -439,9 +382,7 @@
     },
     "/order/{id}": {
       "get": {
-        "tags": [
-          "Orders"
-        ],
+        "tags": ["Orders"],
         "summary": "Get Order record by ID.",
         "description": "",
         "parameters": [
@@ -468,9 +409,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Orders"
-        ],
+        "tags": ["Orders"],
         "summary": "Updated Order record, with optional fields.",
         "description": "",
         "parameters": [
@@ -500,9 +439,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Orders"
-        ],
+        "tags": ["Orders"],
         "summary": "Delete Order record.",
         "description": "",
         "parameters": [
@@ -531,9 +468,7 @@
     },
     "/order/user/{id}": {
       "get": {
-        "tags": [
-          "Orders"
-        ],
+        "tags": ["Orders"],
         "summary": "Get Order record by USER_ID.",
         "description": "",
         "parameters": [
@@ -563,7 +498,8 @@
     "/inventory/": {
       "get": {
         "tags": ["Inventory"],
-        "description": "",
+        "summary": "Get All Inventory records.",
+        "description": "Get All Inventory records.",
         "responses": {
           "200": {
             "description": "OK"
@@ -572,7 +508,8 @@
       },
       "post": {
         "tags": ["Inventory"],
-        "description": "",
+        "summary": "Create a new Inventory record.",
+        "description": "Create a new Inventory record.",
         "responses": {
           "200": {
             "description": "OK: Inventory record was successfully created."
@@ -604,7 +541,8 @@
     "/inventory/{id}": {
       "get": {
         "tags": ["Inventory"],
-        "description": "",
+        "summary": "Get inventory items by Object ID.",
+        "description": "Get inventory items by Object ID.",
         "parameters": [
           {
             "name": "id",
@@ -632,7 +570,8 @@
       },
       "put": {
         "tags": ["Inventory"],
-        "description": "",
+        "summary": "Update an Inventory record.",
+        "description": "Update an Inventory record.",
         "parameters": [
           {
             "name": "id",
@@ -672,7 +611,8 @@
       },
       "delete": {
         "tags": ["Inventory"],
-        "description": "",
+        "summary": "Delete an Inventory record.",
+        "description": "Delete an Inventory record.",
         "parameters": [
           {
             "name": "id",
@@ -758,12 +698,7 @@
             "example": ""
           }
         },
-        "required": [
-          "displayName",
-          "fname",
-          "email",
-          "op_lvl"
-        ]
+        "required": ["displayName", "fname", "email", "op_lvl"]
       },
       "schemaAdminOptional": {
         "type": "object",
@@ -822,35 +757,20 @@
       "schemaOrderRequired": {
         "type": "object",
         "properties": {
-          "user": {
+          "userID": {
             "type": "string",
             "example": ""
           },
-          "requests": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "itemName": {
-                  "type": "string",
-                  "example": ""
-                },
-                "amount": {
-                  "type": "string",
-                  "example": ""
-                }
-              },
-              "required": [
-                "itemName",
-                "amount"
-              ]
-            }
+          "itemName": {
+            "type": "string",
+            "example": ""
+          },
+          "amount": {
+            "type": "string",
+            "example": ""
           }
         },
-        "required": [
-          "user",
-          "requests"
-        ]
+        "required": ["userID", "itemName", "amount"]
       },
       "schemaOrderOptional": {
         "type": "object",
@@ -897,12 +817,7 @@
             "example": ""
           }
         },
-        "required": [
-          "productName",
-          "price",
-          "stock",
-          "description"
-        ]
+        "required": ["productName", "price", "stock", "description"]
       },
       "schemaInventoryOptional": {
         "type": "object",

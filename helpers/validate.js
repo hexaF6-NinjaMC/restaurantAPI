@@ -93,7 +93,7 @@ const userSchema = Joi.object().keys({
       "string.min": "\"displayName\" must be at least 2 characters long.",
       "string.pattern.base":
         "\"displayName\" must contain only English letters, numbers, periods, underscores, apostrophes, single-spaces, and hyphens."
-    }),  
+    }),
   fname: Joi.string()
     .trim()
     .lowercase()
@@ -137,19 +137,14 @@ const inventoryPUTSchema = Joi.object().keys({
 });
 
 const orderSchema = Joi.object().keys({
-  userDisplayName: Joi.string()
+  userID: Joi.string()
     .trim()
-    .lowercase()
     .required()
-    .min(2)
-    .regex(/^[a-zA-Z.'_-]+$/)
-    .messages({
-      "string.min": "\"displayName\" must be at least 2 characters long.",
-      "string.pattern.base":
-        "\"displayName\" must contain only English letters, numbers, periods, underscores, and hyphens."
-    }),
-  date: Joi.date().required().max("now"),
-  price: Joi.number().required()
+    .regex(/^[a-fA-F0-9]+$/)
+    .min(24)
+    .max(24),
+  itemName: Joi.string().trim().required().min(1),
+  amount: Joi.number().integer().required().min(1)
 });
 
 module.exports = {
