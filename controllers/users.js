@@ -105,9 +105,7 @@ const createUser = async (req, res, next) => {
       email: req.body.email,
       creationDate: new Date().toLocaleDateString()
     };
-  
-    res.status(200).json({ message: "User POST request" });
-  
+      
     const response = await mongodb
       .getDb()
       .db()
