@@ -169,8 +169,11 @@
     },
     "/user/": {
       "get": {
-        "tags": ["User"],
-        "description": "",
+        "tags": [
+          "User"
+        ],
+        "summary": "Get All User records.",
+        "description": "Get All User records.",
         "responses": {
           "200": {
             "description": "OK: User record was successfully created."
@@ -229,8 +232,11 @@
     },
     "/user/{id}": {
       "get": {
-        "tags": ["User"],
-        "description": "",
+        "tags": [
+          "User"
+        ],
+        "summary": "Get User record by ID.",
+        "description": "Get User record by ID.",
         "parameters": [
           {
             "name": "id",
@@ -270,8 +276,11 @@
         ]
       },
       "put": {
-        "tags": ["User"],
-        "description": "",
+        "tags": [
+          "User"
+        ],
+        "summary": "Update User record, ref'd by _id, with optional fields.",
+        "description": "Update User record, ref'd by _id, with optional fields.",
         "parameters": [
           {
             "name": "id",
@@ -313,7 +322,8 @@
         "tags": [
           "User"
         ],
-        "description": "",
+        "summary": "Delete User record, ref'd by _id, with optional fields.",
+        "description": "Delete User record, ref'd by _id, with optional fields.",
         "parameters": [
           {
             "name": "id",
@@ -326,67 +336,22 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK: User record was successfully created."
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "401": {
-            "description": "Unauthorized"
-          }
-        }
-      }
-    },
-    "/user/register": {
-      "post": {
-        "tags": ["User"],
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
+            "description": "Unauthorized: You must be logged in."
           },
-          "401": {
-            "description": "Unauthorized"
+          "403": {
+            "description": "Forbidden: You must be logged in."
           },
           "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "displayName": {
-                    "example": "any"
-                  },
-                  "fname": {
-                    "example": "any"
-                  },
-                  "lname": {
-                    "example": "any"
-                  },
-                  "profilePicURI": {
-                    "example": "any"
-                  },
-                  "email": {
-                    "example": "any"
-                  },
-                  "creationDate": {
-                    "example": "any"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/user/login": {
-      "post": {
-        "tags": ["User"],
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
+            "description": "Internal Server Error: Something happened on the server side while deleting the User profile."
           }
         }
       }
@@ -562,8 +527,11 @@
     },
     "/inventory/": {
       "get": {
-        "tags": ["Inventory"],
-        "description": "",
+        "tags": [
+          "Inventory"
+        ],
+        "summary": "Get All Inventory records.",
+        "description": "Get All Inventory records.",
         "responses": {
           "200": {
             "description": "OK"
@@ -571,8 +539,11 @@
         }
       },
       "post": {
-        "tags": ["Inventory"],
-        "description": "",
+        "tags": [
+          "Inventory"
+        ],
+        "summary": "Create a new Inventory record.",
+        "description": "Create a new Inventory record.",
         "responses": {
           "200": {
             "description": "OK: Inventory record was successfully created."
@@ -603,8 +574,11 @@
     },
     "/inventory/{id}": {
       "get": {
-        "tags": ["Inventory"],
-        "description": "",
+        "tags": [
+          "Inventory"
+        ],
+        "summary": "Get inventory items by Object ID.",
+        "description": "Get inventory items by Object ID.",
         "parameters": [
           {
             "name": "id",
@@ -631,8 +605,11 @@
         }
       },
       "put": {
-        "tags": ["Inventory"],
-        "description": "",
+        "tags": [
+          "Inventory"
+        ],
+        "summary": "Update an Inventory record.",
+        "description": "Update an Inventory record.",
         "parameters": [
           {
             "name": "id",
@@ -671,8 +648,11 @@
         }
       },
       "delete": {
-        "tags": ["Inventory"],
-        "description": "",
+        "tags": [
+          "Inventory"
+        ],
+        "summary": "Delete an Inventory record.",
+        "description": "Delete an Inventory record.",
         "parameters": [
           {
             "name": "id",
