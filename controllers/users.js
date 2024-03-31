@@ -64,7 +64,7 @@ const getUserById = async (req, res, next) => {
     const userId = new ObjectId(req.params.id);
     const result = await mongodb
       .getDb()
-      .db()
+      .db("Restaurant")
       .collection("users")
       .findOne({ _id: userId });
 
@@ -105,10 +105,10 @@ const createUser = async (req, res, next) => {
       email: req.body.email,
       creationDate: new Date().toLocaleDateString()
     };
-      
+
     const response = await mongodb
       .getDb()
-      .db()
+      .db("Restaurant")
       .collection("users")
       .insertOne(user);
     if (response.acknowledged) {
@@ -155,7 +155,7 @@ const updateUser = async (req, res, next) => {
       creationDate: new Date().toLocaleDateString()
     };
     const userData = await userSchema.validateAsync(user);
-    const result = await mongodb.getDb().db().collection("users").findOneAndUpdate(
+    const result = await mongodb.getDb().db("Restaurant").collection("users").findOneAndUpdate(
       { _id: ID },
       {
         $set: userData
@@ -185,7 +185,7 @@ const deleteUser = async (req, res) => {
   }
 
   const userId = new ObjectId(req.params.id);
-  const response = await mongodb.getDb().db().collection("users").deleteOne({ _id: userId }, true);
+  const response = await mongodb.getDb().db("Restaurant").collection("users").deleteOne({ _id: userId }, true);
   if (response.deletedCount > 0) {
     res.status(204).send();
   } else {
