@@ -1,6 +1,9 @@
 const { createObjectId } = require("../helpers/utils");
 const mongodb = require("../data/database");
-const { inventoryPOSTSchema, inventoryPUTSchema } = require("../helpers/validate");
+const {
+  inventoryPOSTSchema,
+  inventoryPUTSchema
+} = require("../helpers/validate");
 
 const getAll = async (req, res, next) => {
   // #swagger.tags = ['Inventory']
@@ -135,10 +138,14 @@ const deleteItem = async (req, res, next) => {
       .deleteOne({ _id: ID });
     if (result.deletedCount > 0) {
       res.setHeader("Content-Type", "application/json");
-      res.status(200).json({ message: `Deleted inventory item by ID ${req.params.id}`});
+      res
+        .status(200)
+        .json({ message: `Deleted inventory item by ID ${req.params.id}` });
     } else {
       res.setHeader("Content-Type", "application/json");
-      res.status(500).json({ message: `Nothing to delete by ID ${req.params.id}.` }); // Falsy(default) // Should we use 200 or 404 if nothing found in collection for deleteAdmin()?
+      res
+        .status(500)
+        .json({ message: `Nothing to delete by ID ${req.params.id}.` }); // Falsy(default) // Should we use 200 or 404 if nothing found in collection for deleteAdmin()?
     }
   } catch (err) {
     next(err);
