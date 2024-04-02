@@ -1,6 +1,6 @@
 const { createObjectId } = require("../helpers/utils");
 const mongodb = require("../data/database");
-const { inventoryPOSTSchema } = require("../helpers/validate");
+const { inventoryPOSTSchema, inventoryPUTSchema } = require("../helpers/validate");
 
 const getAll = async (req, res, next) => {
   // #swagger.tags = ['Inventory']
@@ -69,7 +69,7 @@ const createItem = async (req, res, next) => {
   }
 };
 
-const updateItem = async (req, res) => {
+const updateItem = async (req, res, next) => {
   // #swagger.tags = ['Inventory']
   /* #swagger.requestBody = {
     content: {
@@ -87,10 +87,38 @@ const updateItem = async (req, res) => {
   // #swagger.responses[403] = {description: "Forbidden: You must be logged in with an Admin/Manager account with the appropriate privileges."}
   // #swagger.responses[422] = {description: "Unprocessable Entity: Data is not valid."}
   // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while updating the Inventory record."}
-  res.status(200).json({ message: "Inventory PUT request" });
+  // res.status(200).json({ message: "Inventory PUT request" });
+  try {
+    const ID = createObjectId(req.params.id);
+
+    const invBody = {
+      productName: req.body.productName,
+      description: req.body.description,
+      price: req.body.price,
+      stock: req.body.stock
+    };
+
+    const invData = await inventoryPUTSchema.validateAsync(invBody);
+    const result = await mongodb
+      .getDb()
+      .db("Restaurant")
+      .collection("inventory")
+      .findOneAndUpdate(
+        { _id: ID },
+        {
+          $set: invData
+        },
+        { returnDocument: "after" } // Use this setup for updating fields within record.
+      );
+    res.setHeader("Content-Type", "application/json");
+    res.status(200).json(result);
+  } catch (err) {
+    if (err.isJoi === true) err.status = 422;
+    next(err);
+  }
 };
 
-const deleteItem = async (req, res) => {
+const deleteItem = async (req, res, next) => {
   // #swagger.tags = ['Inventory']
   // #swagger.summary = "Delete an Inventory record."
   // #swagger.description = "Delete an Inventory record."
@@ -98,7 +126,23 @@ const deleteItem = async (req, res) => {
   // #swagger.responses[401] = {description: "Unauthorized: You must be logged in with an Admin/Manager account."}
   // #swagger.responses[403] = {description: "Forbidden: You must be logged in with an Admin/Manager account with the appropriate privileges."}
   // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while deleting the Inventory record."}
-  res.status(200).json({ message: "Inventory DELETE request" });
+  try {
+    const ID = createObjectId(req.params.id);
+    const result = await mongodb
+      .getDb()
+      .db("Restaurant")
+      .collection("inventory")
+      .deleteOne({ _id: ID });
+    if (result.deletedCount > 0) {
+      res.setHeader("Content-Type", "application/json");
+      res.status(200).json({ message: `Deleted inventory item by ID ${req.params.id}`});
+    } else {
+      res.setHeader("Content-Type", "application/json");
+      res.status(500).json({ message: `Nothing to delete by ID ${req.params.id}.` }); // Falsy(default) // Should we use 200 or 404 if nothing found in collection for deleteAdmin()?
+    }
+  } catch (err) {
+    next(err);
+  }
 };
 
 const getById = async (req, res, next) => {
