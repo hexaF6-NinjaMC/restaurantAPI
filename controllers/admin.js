@@ -14,13 +14,15 @@ const getAll = async (req, res, next) => {
   // #swagger.tags = ["Admin"]
   // #swagger.summary = "Get All Admin (lvl 1) or Manager (lvl 2) records."
   // #swagger.description = "Get All Admin (lvl 1) or Manager (lvl 2) records."
-  // #swagger.parameters["op_lvl"] = {description: "The Operator level to filter by."}
+  /* #swagger.parameters["op_lvl"] = {
+    description: "The Operator level to filter by.",
+    required: true
+  } */
   // #swagger.responses[200] = {description: "OK: Admin record was successfully created."}
   // #swagger.responses[401] = {description: "Unauthorized: You must be logged in with an Admin account."}
   // #swagger.responses[403] = {description: "Forbidden: You must be logged in with an Admin account with the appropriate privileges."}
   // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while creating the Admin profile."}
   try {
-    // console.log(req.session.user);
     const result = await mongodb
       .getDb()
       .db("Restaurant")
@@ -31,7 +33,7 @@ const getAll = async (req, res, next) => {
         res.setHeader("Content-Type", "application/json");
         return parseInt(req.query.op_lvl, 10) === 1
           ? res.status(200).json({ message: "No Administrators to display." }) // Truthy
-          : res.status(200).json({ message: "No Managers to display." }); // Falsy (default) // Should we use 200 or 404 if nothing found in collection for getAll()?
+          : res.status(200).json({ message: "No Managers to display." }); // Falsy (default) // Use 200 if nothing found in collection
       }
       res.setHeader("Content-Type", "application/json");
       res.status(200).json(resArr);
@@ -74,7 +76,6 @@ const createAdmin = async (req, res, next) => {
       creationDate: new Date().toLocaleDateString(),
       profilePicURI: req.body.profilePicURI
     };
-    console.log(req.session.user);
     const adminData = await adminPOSTSchema.validateAsync(adminBody, {
       allowUnknown: true
     });
@@ -111,6 +112,7 @@ const updateAdmin = async (req, res, next) => {
   // #swagger.responses[200] = {description: "OK: Admin record was successfully created."}
   // #swagger.responses[401] = {description: "Unauthorized: You must be logged in with an Admin account."}
   // #swagger.responses[403] = {description: "Forbidden: You must be logged in with an Admin account with the appropriate privileges."}
+  // #swagger.responses[404] = {description: "Not Found: Could not find a record with that ID."}
   // #swagger.responses[422] = {description: "Unprocessable Entity: Data is not valid."}
   // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while creating the Admin profile."}
   try {
@@ -147,11 +149,12 @@ const updateAdmin = async (req, res, next) => {
 const deleteAdmin = async (req, res, next) => {
   // TODO: implement admin creation, permission handling for op-lvl 1
   // #swagger.tags = ["Admin"]
-  // #swagger.summary = "Delete Admin/Manager record, ref'd by _id, with optional fields."
-  // #swagger.description = "Delete Admin/Manager record, ref'd by _id, with optional fields."
+  // #swagger.summary = "Delete Admin/Manager record by ID."
+  // #swagger.description = "Delete Admin/Manager record by ID."
   // #swagger.responses[200] = {description: "OK: Admin record was successfully created."}
   // #swagger.responses[401] = {description: "Unauthorized: You must be logged in with an Admin account."}
   // #swagger.responses[403] = {description: "Forbidden: You must be logged in with an Admin account with the appropriate privileges."}
+  // #swagger.responses[404] = {description: "Not Found: Could not find a record with that ID."}
   // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while creating the Admin profile."}
   try {
     const ID = createObjectId(req.params.id);
@@ -162,9 +165,9 @@ const deleteAdmin = async (req, res, next) => {
       .deleteOne({ _id: ID });
     res.setHeader("Content-Type", "application/json");
     if (result.deletedCount === 0) {
-      res.status(200).json({
-        message: `Nothing to delete by ID ${req.params.id.toLowerCase()}.`
-      }); // Falsy (default) // Should we use 200 or 404 if nothing found in collection for deleteAdmin()?
+      res.status(404).json({
+        message: `Nothing to delete by ID ${ID}.`
+      }); // Use 404 if nothing found in collection
       return;
     }
     res.status(200).json({

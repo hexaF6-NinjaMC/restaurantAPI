@@ -13,11 +13,7 @@ const isAuthenticated = (req, res, next) => {
  */
 const isAdmin = (req, res, next) => {
   // Some checking is done here "server"-side in case of spoofing attempts by a bad actor.
-  if (
-    req.session.user.op_lvl !== 1 &&
-    req.session.user.op_lvl !== 2 &&
-    req.session.user.op_lvl === undefined
-  ) {
+  if (req.session.user.op_lvl !== 1 && req.session.user.op_lvl !== 2) {
     return res
       .status(403)
       .json("You do not have permission to use that resource/method.");

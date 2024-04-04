@@ -2,10 +2,9 @@
  * Started implementing functionality for users.
  * Contains functionality for creating, reading, updating, and deleting users according to the Joi schema.
  */
-const { ObjectId } = require("mongodb");
 const mongodb = require("../data/database");
 const { createObjectId } = require("../helpers/utils");
-const { userSchema } = require("../helpers/validate");
+const { userPOSTSchema, userPUTSchema } = require("../helpers/validate");
 
 const getAll = async (req, res, next) => {
   // #swagger.tags = ["User"]
@@ -44,14 +43,8 @@ const getUserById = async (req, res, next) => {
   // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
   // #swagger.responses[403] = {description: "Forbidden: You must be logged in."}
   // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while creating the User profile."}
-
-  // data validation for user ID
-  if (!ObjectId.isValid(req.params.id)) {
-    res.status(400).json("Must use a valid user id to find a user.");
-  }
-
   try {
-    const userId = new ObjectId(req.params.id);
+    const userId = createObjectId(req.params.id);
     const result = await mongodb
       .getDb()
       .db("Restaurant")
@@ -96,11 +89,15 @@ const createUser = async (req, res, next) => {
       creationDate: new Date().toLocaleDateString()
     };
 
+    const userData = await userPOSTSchema.validateAsync(user, {
+      allowUnknown: true
+    });
+
     const response = await mongodb
       .getDb()
       .db("Restaurant")
       .collection("users")
-      .insertOne(user);
+      .insertOne(userData);
     if (response.acknowledged) {
       res.status(200).send();
     } else {
@@ -131,6 +128,7 @@ const updateUser = async (req, res, next) => {
   // #swagger.responses[200] = {description: "OK: User record was successfully updated."}
   // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
   // #swagger.responses[403] = {description: "Forbidden: You must be logged in."}
+  // #swagger.responses[404] = {description: "Not Found: Could not find a record with that ID."}
   // #swagger.responses[422] = {description: "Unprocessable Entity: Data is not valid."}
   // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while creating the User profile."}
   try {
@@ -144,7 +142,9 @@ const updateUser = async (req, res, next) => {
       email: req.body.email,
       creationDate: new Date().toLocaleDateString()
     };
-    const userData = await userSchema.validateAsync(user);
+    const userData = await userPUTSchema.validateAsync(user, {
+      allowUnknown: true
+    });
     const result = await mongodb
       .getDb()
       .db("Restaurant")
@@ -166,36 +166,32 @@ const updateUser = async (req, res, next) => {
   }
 };
 
-const deleteUser = async (req, res) => {
+const deleteUser = async (req, res, next) => {
   // #swagger.tags = ["User"]
   // #swagger.summary = "Delete User record, ref'd by _id, with optional fields."
   // #swagger.description = "Delete User record, ref'd by _id, with optional fields."
   // #swagger.responses[200] = {description: "OK: User record was successfully created."}
+  // #swagger.responses[204] = {description: "No Content: User record was successfully deleted."}
   // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
   // #swagger.responses[403] = {description: "Forbidden: You must be logged in."}
+  // #swagger.responses[404] = {description: "Not Found: Could not find a record with that ID."}
   // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while deleting the User profile."}
-  if (!ObjectId.isValid(req.params.id)) {
-    res.status(400).json("Must be a valid user ID");
+  try {
+    const userId = createObjectId(req.params.id);
+    const response = await mongodb
+      .getDb()
+      .db()
+      .collection("users")
+      .deleteOne({ _id: userId }, true);
+    if (response.deletedCount === 0) {
+      return res
+        .status(404)
+        .json({ message: `Nothing to delete by ID ${userId}.` });
+    }
+    res.status(200).json({ message: "User record successfully deleted." });
+  } catch (err) {
+    next(err);
   }
-
-  const userId = new ObjectId(req.params.id);
-  const response = await mongodb
-    .getDb()
-    .db()
-    .collection("users")
-    .deleteOne({ _id: userId }, true);
-  if (response.deletedCount > 0) {
-    res.status(204).send();
-  } else {
-    res
-      .status(500)
-      .json(response.error || "Something went wrong deleting the user.");
-  }
-};
-
-const login = async (req, res) => {
-  // #swagger.tags = ['User']
-  res.status(200).json({ message: "Login Endpoint" });
 };
 
 module.exports = {
@@ -203,6 +199,5 @@ module.exports = {
   getUserById,
   createUser,
   updateUser,
-  deleteUser,
-  login
+  deleteUser
 };

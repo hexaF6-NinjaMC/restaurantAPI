@@ -64,6 +64,13 @@ const doc = {
         op_lvl: "",
         profilePicURI: ""
       },
+      schemaUserRequired: {
+        $displayName: "",
+        $fname: "",
+        lname: "",
+        $email: "",
+        profilePicURI: ""
+      },
       schemaUserOptional: {
         displayName: "",
         fname: "",

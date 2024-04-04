@@ -46,7 +46,10 @@ const createOrder = async (req, res, next) => {
   } */
   // #swagger.summary = "Create Order record, with optional fields."
   // #swagger.description = "Create Order record, with optional fields."
-  // #swagger.parameters["userID"] = {description: "YOU BORKED IT! GAME OVER MAN!"}
+  /* #swagger.parameters["userID"] = {
+    description: "User ID to be associated with the order.",
+    required: true
+  } */
   // #swagger.responses[200] = {description: "OK: Order record was successfully created."}
   // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
   // #swagger.responses[422] = {description: "Unprocessable Entity: Data is not valid."}

@@ -31,7 +31,7 @@ const adminPOSTSchema = Joi.object().keys({
         "\"fname\" must contain only English letters, numbers, periods, underscores, apostrophes, single-spaces, and hyphens."
     }),
   lname: Joi.string()
-    .optional()
+    .empty("")
     .trim()
     .lowercase()
     .min(2)
@@ -41,7 +41,7 @@ const adminPOSTSchema = Joi.object().keys({
       "string.pattern.base":
         "\"lname\" must contain only English letters, numbers, periods, underscores, apostrophes, single-spaces, and hyphens."
     }),
-  profilePic: Joi.string().optional().trim().uri() // may not need to check for this as some Google accounts have a default pic.
+  profilePic: Joi.string().empty("").trim().uri() // may not need to check for this as some Google accounts have a default pic.
 });
 
 const adminPUTSchema = Joi.object().keys({
@@ -83,7 +83,7 @@ const adminPUTSchema = Joi.object().keys({
   profilePicURI: Joi.string().empty("").trim().uri() // may not need to check for this as some Google accounts have a default pic.
 });
 
-const userSchema = Joi.object().keys({
+const userPOSTSchema = Joi.object().keys({
   displayName: Joi.string()
     .trim()
     .required()
@@ -106,7 +106,7 @@ const userSchema = Joi.object().keys({
         "\"fname\" must contain only English letters, numbers, periods, underscores, apostrophes, single-spaces, and hyphens."
     }),
   lname: Joi.string()
-    .optional()
+    .empty("")
     .trim()
     .lowercase()
     .min(2)
@@ -118,8 +118,45 @@ const userSchema = Joi.object().keys({
     }),
 
   email: Joi.string().trim().lowercase().required().email().min(7),
-  profilePicURI: Joi.string().optional().trim(), // may not need to check for this as some Google accounts have a default pic.
-  creationDate: Joi.string().optional().trim()
+  profilePicURI: Joi.string().empty("").trim()
+});
+
+const userPUTSchema = Joi.object().keys({
+  displayName: Joi.string()
+    .empty("")
+    .trim()
+    .min(2)
+    .regex(/^[a-zA-Z.'_-\s]+$/)
+    .messages({
+      "string.min": "\"displayName\" must be at least 2 characters long.",
+      "string.pattern.base":
+        "\"displayName\" must contain only English letters, numbers, periods, underscores, apostrophes, single-spaces, and hyphens."
+    }),
+  fname: Joi.string()
+    .empty("")
+    .trim()
+    .lowercase()
+    .min(2)
+    .regex(/^[a-zA-Z.'_-\s]+$/)
+    .messages({
+      "string.min": "\"displayName\" must be at least 2 characters long.",
+      "string.pattern.base":
+        "\"fname\" must contain only English letters, numbers, periods, underscores, apostrophes, single-spaces, and hyphens."
+    }),
+  lname: Joi.string()
+    .empty("")
+    .trim()
+    .lowercase()
+    .min(2)
+    .regex(/^[a-zA-Z.'_-\s]+$/)
+    .messages({
+      "string.min": "\"displayName\" must be at least 2 characters long.",
+      "string.pattern.base":
+        "\"lname\" must contain only English letters, numbers, periods, underscores, apostrophes, single-spaces, and hyphens."
+    }),
+
+  email: Joi.string().empty("").trim().lowercase().email().min(7),
+  profilePicURI: Joi.string().empty("").trim() // may not need to check for this as some Google accounts have a default pic.
 });
 
 const inventoryPOSTSchema = Joi.object().keys({
@@ -132,8 +169,8 @@ const inventoryPOSTSchema = Joi.object().keys({
 const inventoryPUTSchema = Joi.object().keys({
   productName: Joi.string().empty("").trim(),
   description: Joi.string().empty("").trim(),
-  price: Joi.number().integer().empty(""),
-  stock: Joi.number().integer().empty("")
+  price: Joi.number().empty("").integer(),
+  stock: Joi.number().empty("").integer()
 });
 
 const orderPOSTSchema = Joi.object().keys({
@@ -149,7 +186,8 @@ const orderPUTSchema = Joi.object().keys({
 module.exports = {
   adminPOSTSchema,
   adminPUTSchema,
-  userSchema,
+  userPOSTSchema,
+  userPUTSchema,
   inventoryPOSTSchema,
   inventoryPUTSchema,
   orderPOSTSchema,

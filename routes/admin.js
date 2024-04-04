@@ -11,17 +11,12 @@ const { isAuthenticated, isAdmin } = require("../middleware/authenticate");
 router.get("/", isAuthenticated, isAdmin, isValidLevel, adminController.getAll);
 
 // Create new admin/manager in record
-router.post(
-  "/",
-  /* validation.someSortOfRule */ isAuthenticated,
-  isAdmin,
-  adminController.createAdmin
-);
+router.post("/", isAuthenticated, isAdmin, adminController.createAdmin);
 
 // Update to admin/manager by ID
 router.put(
   "/:id",
-  /* validation.someSortOfRule, */ isAuthenticated,
+  isAuthenticated,
   isAdmin,
   isValidId,
   adminController.updateAdmin

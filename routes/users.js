@@ -6,22 +6,22 @@ const express = require("express");
 
 const router = express.Router();
 const usersController = require("../controllers/users");
-const { isAuthenticated } = require("../middleware/authenticate"); // could use some help on this
-// const { isValidId } = require("../middleware/validation");
+const { isAuthenticated, isAdmin } = require("../middleware/authenticate"); // could use some help on this
+const { isValidId } = require("../middleware/validation");
 
-// Get all users
-router.get("/", isAuthenticated, usersController.getAll);
+// Get all users, restricted to only admins and managers
+router.get("/", isAuthenticated, isAdmin, usersController.getAll);
 
 // Get user by id
-router.get("/:id", isAuthenticated, usersController.getUserById);
+router.get("/:id", isAuthenticated, isValidId, usersController.getUserById);
 
 router.post("/", isAuthenticated, usersController.createUser);
 
 // Update user if authenticated as admin or user
-router.put("/:id", isAuthenticated, usersController.updateUser);
+router.put("/:id", isAuthenticated, isValidId, usersController.updateUser);
 
 // Delete user by ID
-router.delete("/:id", isAuthenticated, usersController.deleteUser);
+router.delete("/:id", isAuthenticated, isValidId, usersController.deleteUser);
 
 // /**
 //  * ~Aaron: consider removing from routes, as OAuth2 is implemented through <root>/auth/*. Or,

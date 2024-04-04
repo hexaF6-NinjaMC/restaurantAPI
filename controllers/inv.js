@@ -162,7 +162,7 @@ const getById = async (req, res, next) => {
   try {
     const ID = createObjectId(req.params.id);
     const result = await mongodb
-      .getDatabase()
+      .getDb()
       .db("Restaurant")
       .collection("inventory")
       .find({ _id: ID });
