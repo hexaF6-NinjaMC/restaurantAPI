@@ -2,7 +2,8 @@
 // - AUSTIN
 
 const mongodb = require("../data/database");
-const { orderSchema } = require("../helpers/validate");
+const { orderPUTSchema, orderPOSTSchema } = require("../helpers/validate");
+const { createObjectId } = require("../helpers/utils");
 
 const getAll = async (req, res, next) => {
   // #swagger.tags = ['Orders']
@@ -45,19 +46,23 @@ const createOrder = async (req, res, next) => {
   } */
   // #swagger.summary = "Create Order record, with optional fields."
   // #swagger.description = "Create Order record, with optional fields."
+  // #swagger.parameters["userID"] = {description: "YOU BORKED IT! GAME OVER MAN!"}
   // #swagger.responses[200] = {description: "OK: Order record was successfully created."}
   // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
   // #swagger.responses[422] = {description: "Unprocessable Entity: Data is not valid."}
   // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while creating the Order record."}
   try {
+    const id = createObjectId(req.query.userID);
     const orders = {
-      userID: req.body.userID,
+      userID: id,
       itemName: req.body.itemName,
-      amount: req.body.amount
+      amount: req.body.amount,
     };
 
     // Validate
-    const orderData = await orderSchema.validateAsync(orders);
+    const orderData = await orderPOSTSchema.validateAsync(orders, {
+      allowUnknown: true,
+    });
 
     const response = await mongodb
       .getDb()
@@ -72,7 +77,7 @@ const createOrder = async (req, res, next) => {
   }
 };
 
-const updateOrder = async (req, res) => {
+const updateOrder = async (req, res, next) => {
   // #swagger.tags = ['Orders']
   // #swagger.summary = "Updated Order record, with optional fields."
   // #swagger.parameters["id"] = {description: "hexadecimal string 24 character"}
@@ -80,7 +85,34 @@ const updateOrder = async (req, res) => {
   // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
   // #swagger.responses[422] = {description: "Unprocessable Entity: Data is not valid."}
   // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while updating the Order record."}
-  res.status(200).json({ message: "Order PUT request" });
+  try {
+    const id = createObjectId(req.query.userID);
+    const orders = {
+      userID: id,
+      itemName: req.body.itemName,
+      amount: req.body.amount,
+    };
+
+    // Validate
+    const orderData = await orderPUTSchema.validateAsync(orders, {
+      allowUnknown: true,
+    });
+
+    const response = await mongodb
+      .getDb()
+      .db("Restaurant")
+      .collection("order")
+      .findOneAndUpdate(
+        { _id: id },
+        { $set: orderData },
+        { returnDocument: "after" }
+      );
+    res.setHeader("Content-Type", "application/json");
+    res.status(200).json(response);
+  } catch (err) {
+    if (err.isJoi === true) err.status = 422;
+    next(err);
+  }
 };
 
 const deleteOrder = async (req, res) => {
@@ -119,5 +151,5 @@ module.exports = {
   getAllOrdersByUserId,
   createOrder,
   updateOrder,
-  deleteOrder
+  deleteOrder,
 };

@@ -72,12 +72,10 @@ const doc = {
         profilePicURI: ""
       },
       schemaOrderRequired: {
-        $userID: "",
         $itemName: "",
         $amount: ""
       },
       schemaOrderOptional: {
-        $userID: "",
         $itemName: "",
         $amount: ""
       },

@@ -136,15 +136,14 @@ const inventoryPUTSchema = Joi.object().keys({
   stock: Joi.number().integer().empty("")
 });
 
-const orderSchema = Joi.object().keys({
-  userID: Joi.string()
-    .trim()
-    .required()
-    .regex(/^[a-fA-F0-9]+$/)
-    .min(24)
-    .max(24),
+const orderPOSTSchema = Joi.object().keys({
   itemName: Joi.string().trim().required().min(1),
   amount: Joi.number().integer().required().min(1)
+});
+
+const orderPUTSchema = Joi.object().keys({
+  itemName: Joi.string().empty("").trim().min(1),
+  amount: Joi.number().empty("").integer().min(1)
 });
 
 module.exports = {
@@ -153,5 +152,6 @@ module.exports = {
   userSchema,
   inventoryPOSTSchema,
   inventoryPUTSchema,
-  orderSchema
+  orderPOSTSchema,
+  orderPUTSchema
 };

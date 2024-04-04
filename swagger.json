@@ -345,6 +345,16 @@
         "tags": ["Orders"],
         "summary": "Create Order record, with optional fields.",
         "description": "Create Order record, with optional fields.",
+        "parameters": [
+          {
+            "name": "userID",
+            "description": "YOU BORKED IT! GAME OVER MAN!",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK: Order record was successfully created."
@@ -411,6 +421,13 @@
               "type": "string"
             },
             "description": "hexadecimal string 24 character"
+          },
+          {
+            "name": "userID",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -425,6 +442,23 @@
           },
           "500": {
             "description": "Internal Server Error: Something happened on the server side while updating the Order record."
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "itemName": {
+                    "example": "any"
+                  },
+                  "amount": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       },
@@ -747,10 +781,6 @@
       "schemaOrderRequired": {
         "type": "object",
         "properties": {
-          "userID": {
-            "type": "string",
-            "example": ""
-          },
           "itemName": {
             "type": "string",
             "example": ""
@@ -760,32 +790,21 @@
             "example": ""
           }
         },
-        "required": ["userID", "itemName", "amount"]
+        "required": ["itemName", "amount"]
       },
       "schemaOrderOptional": {
         "type": "object",
         "properties": {
-          "user": {
+          "itemName": {
             "type": "string",
             "example": ""
           },
-          "requests": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "itemName": {
-                  "type": "string",
-                  "example": ""
-                },
-                "amount": {
-                  "type": "string",
-                  "example": ""
-                }
-              }
-            }
+          "amount": {
+            "type": "string",
+            "example": ""
           }
-        }
+        },
+        "required": ["itemName", "amount"]
       },
       "schemaInventoryRequired": {
         "type": "object",
