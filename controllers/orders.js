@@ -56,12 +56,12 @@ const createOrder = async (req, res, next) => {
     const orders = {
       userID: ID,
       itemName: req.body.itemName,
-      amount: req.body.amount,
+      amount: req.body.amount
     };
 
     // Validate
     const orderData = await orderPOSTSchema.validateAsync(orders, {
-      allowUnknown: true,
+      allowUnknown: true
     });
 
     const response = await mongodb
@@ -90,12 +90,12 @@ const updateOrder = async (req, res, next) => {
     const orders = {
       userID: ID,
       itemName: req.body.itemName,
-      amount: req.body.amount,
+      amount: req.body.amount
     };
 
     // Validate
     const orderData = await orderPUTSchema.validateAsync(orders, {
-      allowUnknown: true,
+      allowUnknown: true
     });
 
     const response = await mongodb
@@ -133,12 +133,12 @@ const deleteOrder = async (req, res, next) => {
     res.setHeader("Content-Type", "application/json");
     if (result.deletedCount === 0) {
       res.status(200).json({
-        message: `Nothing to delete by ID ${req.params.id.toLowerCase()}.`,
+        message: `Nothing to delete by ID ${req.params.id.toLowerCase()}.`
       }); // Falsy (default) // Should we use 200 or 404 if nothing found in collection for deleteAdmin()?
       return;
     }
     res.status(200).json({
-      message: `Successfully deleted Order record with ID ${ID}.`,
+      message: `Successfully deleted Order record with ID ${ID}.`
     });
   } catch (err) {
     next(err);
@@ -200,5 +200,5 @@ module.exports = {
   getAllOrdersByUserId,
   createOrder,
   updateOrder,
-  deleteOrder,
+  deleteOrder
 };

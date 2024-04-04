@@ -76,8 +76,8 @@ const doc = {
         $amount: ""
       },
       schemaOrderOptional: {
-        $itemName: "",
-        $amount: ""
+        itemName: "",
+        amount: ""
       },
       schemaInventoryRequired: {
         $productName: "",

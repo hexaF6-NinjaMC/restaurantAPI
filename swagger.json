@@ -797,8 +797,7 @@
             "type": "string",
             "example": ""
           }
-        },
-        "required": ["itemName", "amount"]
+        }
       },
       "schemaInventoryRequired": {
         "type": "object",

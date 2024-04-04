@@ -90,7 +90,7 @@ const updateItem = async (req, res, next) => {
   // #swagger.responses[403] = {description: "Forbidden: You must be logged in with an Admin/Manager account with the appropriate privileges."}
   // #swagger.responses[422] = {description: "Unprocessable Entity: Data is not valid."}
   // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while updating the Inventory record."}
-  // res.status(200).json({ message: "Inventory PUT request" });
+  // res.status(200).json({ message: "Inventory PUT request" })
   try {
     const ID = createObjectId(req.params.id);
 
