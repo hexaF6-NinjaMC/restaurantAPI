@@ -17,7 +17,7 @@ router.get("/:id", /* validation.isValidId, */ ordersController.getOrderById);
 // Get all orders placed by a user by user ID
 router.get(
   "/user/:id",
-  /* validation.isValidId, */ isAuthenticated,
+  /* validation.isValidId,*/ isAuthenticated,
   ordersController.getAllOrdersByUserId
 );
 

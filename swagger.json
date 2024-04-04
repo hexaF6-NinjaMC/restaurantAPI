@@ -421,13 +421,6 @@
               "type": "string"
             },
             "description": "hexadecimal string 24 character"
-          },
-          {
-            "name": "userID",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -466,6 +459,7 @@
         "tags": ["Orders"],
         "summary": "Delete Order record.",
         "description": "",
+        "produces": ["application/json"],
         "parameters": [
           {
             "name": "id",

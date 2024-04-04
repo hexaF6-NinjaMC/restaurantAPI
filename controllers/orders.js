@@ -52,9 +52,9 @@ const createOrder = async (req, res, next) => {
   // #swagger.responses[422] = {description: "Unprocessable Entity: Data is not valid."}
   // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while creating the Order record."}
   try {
-    const id = createObjectId(req.query.userID);
+    const ID = createObjectId(req.query.userID);
     const orders = {
-      userID: id,
+      userID: ID,
       itemName: req.body.itemName,
       amount: req.body.amount,
     };
@@ -86,9 +86,9 @@ const updateOrder = async (req, res, next) => {
   // #swagger.responses[422] = {description: "Unprocessable Entity: Data is not valid."}
   // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while updating the Order record."}
   try {
-    const id = createObjectId(req.query.userID);
+    const ID = createObjectId(req.params.id);
     const orders = {
-      userID: id,
+      userID: ID,
       itemName: req.body.itemName,
       amount: req.body.amount,
     };
@@ -103,7 +103,7 @@ const updateOrder = async (req, res, next) => {
       .db("Restaurant")
       .collection("order")
       .findOneAndUpdate(
-        { _id: id },
+        { _id: ID },
         { $set: orderData },
         { returnDocument: "after" }
       );
@@ -115,34 +115,83 @@ const updateOrder = async (req, res, next) => {
   }
 };
 
-const deleteOrder = async (req, res) => {
+const deleteOrder = async (req, res, next) => {
   // #swagger.tags = ['Orders']
   // #swagger.summary = "Delete Order record."
   // #swagger.parameters["id"] = {description: "hexadecimal string 24 character"}
   // #swagger.responses[200] = {description: "OK: Order record was successfully deleted."}
   // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
   // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while deleting the Order record."}
-  res.status(200).json({ message: "Order DELETE request" });
+  try {
+    const ID = createObjectId(req.params.id);
+
+    const result = await mongodb
+      .getDb()
+      .db("Restaurant")
+      .collection("order")
+      .deleteOne({ _id: ID });
+    res.setHeader("Content-Type", "application/json");
+    if (result.deletedCount === 0) {
+      res.status(200).json({
+        message: `Nothing to delete by ID ${req.params.id.toLowerCase()}.`,
+      }); // Falsy (default) // Should we use 200 or 404 if nothing found in collection for deleteAdmin()?
+      return;
+    }
+    res.status(200).json({
+      message: `Successfully deleted Order record with ID ${ID}.`,
+    });
+  } catch (err) {
+    next(err);
+  }
 };
 
-const getOrderById = async (req, res) => {
+const getOrderById = async (req, res, next) => {
   // #swagger.tags = ['Orders']
   // #swagger.summary = "Get Order record by ID."
   // #swagger.parameters["id"] = {description: "hexadecimal string 24 character"}
   // #swagger.responses[200] = {description: "OK: Order record was successfully retrieved."}
   // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
   // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while obtaining the Order record."}
-  res.status(200).json({ message: "OrderById GET request" });
+  try {
+    const ID = createObjectId(req.params.id);
+
+    const response = await mongodb
+      .getDb()
+      .db("Restaurant")
+      .collection("order")
+      .findOne({ _id: ID });
+    res.setHeader("Content-Type", "application/json");
+    res.status(200).json(response);
+  } catch (err) {
+    if (err.isJoi === true) err.status = 422;
+    next(err);
+  }
 };
 
-const getAllOrdersByUserId = async (req, res) => {
+const getAllOrdersByUserId = async (req, res, next) => {
   // #swagger.tags = ['Orders']
   // #swagger.summary = "Get Order record by USER_ID."
   // #swagger.parameters["id"] = {description: "hexadecimal string 24 character"}
   // #swagger.responses[200] = {description: "OK: Order record was successfully retrieved."}
   // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
   // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while obtaining the Order record."}
-  res.status(200).json({ message: "AllOrdersByUserId GET request" });
+  try {
+    const ID = createObjectId(req.params.id);
+
+    const response = await mongodb
+      .getDb()
+      .db("Restaurant")
+      .collection("order")
+      .find({ userID: ID });
+    console.log(response.length);
+    response.toArray().then((resArr) => {
+      res.setHeader("Content-Type", "application/json");
+      res.status(200).json(resArr);
+    });
+  } catch (err) {
+    if (err.isJoi === true) err.status = 422;
+    next(err);
+  }
 };
 
 module.exports = {
