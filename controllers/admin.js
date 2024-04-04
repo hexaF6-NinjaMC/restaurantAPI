@@ -160,16 +160,20 @@ const deleteAdmin = async (req, res, next) => {
       .db("Restaurant")
       .collection("admin")
       .deleteOne({ _id: ID });
-    result.toArray().then((resArr) => {
-      res.setHeader("Content-Type", "application/json");
-      if (resArr.length === 0) {
-        res
-          .status(200)
-          .json({ message: `Nothing to delete by ID ${req.params.id}.` }); // Falsy (default) // Should we use 200 or 404 if nothing found in collection for deleteAdmin()?
-        return;
-      }
-      res.status(200).json(resArr);
-    });
+    res.setHeader("Content-Type", "application/json");
+    if (result.deletedCount === 0) {
+      res
+        .status(200)
+        .json({
+          message: `Nothing to delete by ID ${req.params.id.toLowerCase()}.`
+        }); // Falsy (default) // Should we use 200 or 404 if nothing found in collection for deleteAdmin()?
+      return;
+    }
+    res
+      .status(200)
+      .json({
+        message: `Successfully deleted Admin/Manager record with ID ${ID}.`
+      });
   } catch (err) {
     next(err);
   }

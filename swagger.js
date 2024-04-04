@@ -77,13 +77,9 @@ const doc = {
         $amount: ""
       },
       schemaOrderOptional: {
-        user: "",
-        requests: [
-          {
-            itemName: "",
-            amount: ""
-          }
-        ]
+        $userID: "",
+        $itemName: "",
+        $amount: ""
       },
       schemaInventoryRequired: {
         $productName: "",
