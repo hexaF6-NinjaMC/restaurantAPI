@@ -34,7 +34,7 @@ describe("Test GET method", () => {
       expect(res.statusCode).toBe(200);
     });
   });
-  
+
   describe("getById() for /inventory/:id", () => {
     it("responds to /inventory/:id", async () => {
       const res = await request(app).get("/inventory/6611d78cc6412f6c24c29be0");
