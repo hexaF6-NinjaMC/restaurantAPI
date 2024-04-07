@@ -37,7 +37,7 @@ describe("Test GET method", () => {
   
   describe("getById() for /users/:id", () => {
     it("responds to /users/:id", async () => {
-      const res = await request(app).get("/users/6611d78cc6412f6c24c29be0");
+      const res = await request(app).get("/users/6611dbe833656b5f691c1293");
       expect(res.body.length).toBeGreaterThan(0);
       expect(res.statusCode).toBe(200);
     });
