@@ -1,9 +1,9 @@
 /**
- * Started implementing functionality for users.
- * Contains functionality for creating, reading, updating, and deleting users according to the Joi schema.
+ * Contains functionality for customer (user) accounts.
  */
-const mongodb = require("../data/database");
+
 const { createObjectId } = require("../helpers/utils");
+const User = require("../models/users");
 const { userPOSTSchema, userPUTSchema } = require("../helpers/validate");
 
 const getAll = async (req, res, next) => {
@@ -15,20 +15,12 @@ const getAll = async (req, res, next) => {
   // #swagger.responses[403] = {description: "Forbidden: You must be logged in."}
   // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while creating the User profile."}
   try {
-    const result = await mongodb
-      .getDb()
-      .db("Restaurant")
-      .collection("users")
-      .find();
-    result.toArray().then((resArr) => {
-      if (resArr.length === 0) {
-        res.setHeader("Content-Type", "application/json");
-        res.status(200).json({ message: "No users to display." }); // Should use 200 or 404 if nothing found in collection for getAll()?
-        return;
-      }
-      res.setHeader("Content-Type", "application/json");
-      res.status(200).json(resArr);
-    });
+    res.setHeader("Content-Type", "application/json");
+    const result = await User.find({});
+    if (result.length === 0) {
+      return res.status(200).json({ message: "No users to display." }); // Should use 200 if nothing found in collection
+    }
+    res.status(200).json(result);
   } catch (err) {
     if (err.isJoi === true) err.status = 422;
     next(err);
@@ -39,22 +31,19 @@ const getUserById = async (req, res, next) => {
   // #swagger.tags = ["User"]
   // #swagger.summary = "Get User record by ID."
   // #swagger.description = "Get User record by ID."
+  // #swagger.parameters["id"] = {description: "hexadecimal string 24 character"}
   // #swagger.responses[200] = {description: "OK: User record was successfully created."}
   // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
   // #swagger.responses[403] = {description: "Forbidden: You must be logged in."}
   // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while creating the User profile."}
   try {
     const userId = createObjectId(req.params.id);
-    const result = await mongodb
-      .getDb()
-      .db("Restaurant")
-      .collection("users")
-      .findOne({ _id: userId });
 
-    if (!result) {
-      res.status(404).json({ message: "User not found" });
-    }
     res.setHeader("Content-Type", "application/json");
+    const result = await User.find({ _id: userId });
+    if (result.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
     res.status(200).json(result);
   } catch (err) {
     next(err);
@@ -72,8 +61,8 @@ const createUser = async (req, res, next) => {
       }
     }
   } */
-  // #swagger.summary = "Create a new User record."
-  // #swagger.description = "Create a new User record."
+  // #swagger.summary = "Create a new User record, with optional fields."
+  // #swagger.description = "Create a new User record, with optional fields."
   // #swagger.responses[200] = {description: "OK: User record was successfully created."}
   // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
   // #swagger.responses[403] = {description: "Forbidden: You must be logged in."}
@@ -93,18 +82,11 @@ const createUser = async (req, res, next) => {
       allowUnknown: true
     });
 
-    const response = await mongodb
-      .getDb()
-      .db("Restaurant")
-      .collection("users")
-      .insertOne(userData);
-    if (response.acknowledged) {
-      res.status(200).send();
-    } else {
-      res
-        .status(500)
-        .json(response.error || "Something went wrong when adding a user.");
-    }
+    const result = await new User(userData);
+    result.save().then(() => {
+      res.setHeader("Content-Type", "application/json");
+      res.status(200).json(result);
+    });
   } catch (err) {
     if (err.isJoi === true) err.status = 422;
     next(err);
@@ -123,8 +105,9 @@ const updateUser = async (req, res, next) => {
       }
     }
   } */
-  // #swagger.summary = "Update User record, ref'd by _id, with optional fields."
-  // #swagger.description = "Update User record, ref'd by _id, with optional fields."
+  // #swagger.summary = "Update User record by ID, with optional fields."
+  // #swagger.description = "Update User record by ID, with optional fields."
+  // #swagger.parameters["id"] = {description: "hexadecimal string 24 character"}
   // #swagger.responses[200] = {description: "OK: User record was successfully updated."}
   // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
   // #swagger.responses[403] = {description: "Forbidden: You must be logged in."}
@@ -145,19 +128,13 @@ const updateUser = async (req, res, next) => {
     const userData = await userPUTSchema.validateAsync(user, {
       allowUnknown: true
     });
-    const result = await mongodb
-      .getDb()
-      .db("Restaurant")
-      .collection("users")
-      .findOneAndUpdate(
-        { _id: ID },
-        {
-          $set: userData
-        },
-        {
-          returnDocument: "after"
-        }
-      );
+    const result = await User.findOneAndUpdate(
+      { _id: ID },
+      {
+        $set: userData
+      },
+      { returnDocument: "after" }
+    );
     res.setHeader("Content-Type", "application/json");
     res.status(200).json(result);
   } catch (err) {
@@ -168,8 +145,9 @@ const updateUser = async (req, res, next) => {
 
 const deleteUser = async (req, res, next) => {
   // #swagger.tags = ["User"]
-  // #swagger.summary = "Delete User record, ref'd by _id, with optional fields."
-  // #swagger.description = "Delete User record, ref'd by _id, with optional fields."
+  // #swagger.summary = "Delete User record by ID."
+  // #swagger.description = "Delete User record by ID."
+  // #swagger.parameters["id"] = {description: "hexadecimal string 24 character"}
   // #swagger.responses[200] = {description: "OK: User record was successfully created."}
   // #swagger.responses[204] = {description: "No Content: User record was successfully deleted."}
   // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
@@ -177,18 +155,19 @@ const deleteUser = async (req, res, next) => {
   // #swagger.responses[404] = {description: "Not Found: Could not find a record with that ID."}
   // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while deleting the User profile."}
   try {
-    const userId = createObjectId(req.params.id);
-    const response = await mongodb
-      .getDb()
-      .db()
-      .collection("users")
-      .deleteOne({ _id: userId }, true);
-    if (response.deletedCount === 0) {
-      return res
-        .status(404)
-        .json({ message: `Nothing to delete by ID ${userId}.` });
+    const ID = createObjectId(req.params.id);
+
+    res.setHeader("Content-Type", "application/json");
+    const result = await User.deleteOne({ _id: ID });
+    if (result.deletedCount === 0) {
+      res.status(404).json({
+        message: `Nothing to delete by ID ${ID}.`
+      }); // Use 404 if nothing found in collection
+      return;
     }
-    res.status(200).json({ message: "User record successfully deleted." });
+    res.status(200).json({
+      message: `Successfully deleted Order record with ID ${ID}.`
+    });
   } catch (err) {
     next(err);
   }

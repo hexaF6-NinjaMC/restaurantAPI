@@ -1,9 +1,10 @@
-// TO BE IMPLEMENTED
-// - AUSTIN
+/**
+ * Contains functionality for Order management.
+ */
 
-const mongodb = require("../data/database");
-const { orderPUTSchema, orderPOSTSchema } = require("../helpers/validate");
 const { createObjectId } = require("../helpers/utils");
+const Order = require("../models/orders");
+const { orderPUTSchema, orderPOSTSchema } = require("../helpers/validate");
 
 const getAll = async (req, res, next) => {
   // #swagger.tags = ['Orders']
@@ -13,20 +14,13 @@ const getAll = async (req, res, next) => {
   // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
   // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while pulling the Order record."}
   try {
-    const result = await mongodb
-      .getDb()
-      .db("Restaurant")
-      .collection("order")
-      .find();
-    result.toArray().then((resArr) => {
-      if (resArr.length === 0) {
-        res.setHeader("Content-Type", "application/json");
-        res.status(200).json({ message: "No orders to display." }); // Should use 200 or 404 if nothing found in collection for getAll()?
-        return;
-      }
-      res.setHeader("Content-Type", "application/json");
-      res.status(200).json(resArr);
-    });
+    res.setHeader("Content-Type", "application/json");
+    const result = await Order.find({});
+    if (result.length === 0) {
+      res.status(200).json({ message: "No orders to display." }); // Should use 200 if nothing found in collection for getAll()
+      return;
+    }
+    res.status(200).json(result);
   } catch (err) {
     if (err.isJoi === true) err.status = 422;
     next(err);
@@ -66,14 +60,11 @@ const createOrder = async (req, res, next) => {
     const orderData = await orderPOSTSchema.validateAsync(orders, {
       allowUnknown: true
     });
-
-    const response = await mongodb
-      .getDb()
-      .db("Restaurant")
-      .collection("order")
-      .insertOne(orderData);
-    res.setHeader("Content-Type", "application/json");
-    res.status(200).json(response);
+    const result = await new Order(orderData);
+    result.save().then(() => {
+      res.setHeader("Content-Type", "application/json");
+      res.status(200).json(result);
+    });
   } catch (err) {
     if (err.isJoi === true) err.status = 422;
     next(err);
@@ -82,10 +73,21 @@ const createOrder = async (req, res, next) => {
 
 const updateOrder = async (req, res, next) => {
   // #swagger.tags = ['Orders']
-  // #swagger.summary = "Updated Order record, with optional fields."
+  /* #swagger.requestBody = {
+    content: {
+      "application/json": {
+        schema: {
+          $ref: "#/components/schemas/schemaOrderOptional"
+        }
+      }
+    }
+  } */
+  // #swagger.summary = "Update Order record, with optional fields."
+  // #swagger.description = "Update Order record, with optional fields."
   // #swagger.parameters["id"] = {description: "hexadecimal string 24 character"}
   // #swagger.responses[200] = {description: "OK: Order record was successfully updated."}
   // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
+  // #swagger.responses[404] = {description: "Not Found: Could not find a record with that ID."}
   // #swagger.responses[422] = {description: "Unprocessable Entity: Data is not valid."}
   // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while updating the Order record."}
   try {
@@ -101,15 +103,11 @@ const updateOrder = async (req, res, next) => {
       allowUnknown: true
     });
 
-    const response = await mongodb
-      .getDb()
-      .db("Restaurant")
-      .collection("order")
-      .findOneAndUpdate(
-        { _id: ID },
-        { $set: orderData },
-        { returnDocument: "after" }
-      );
+    const response = await Order.findOneAndUpdate(
+      { _id: ID },
+      { $set: orderData },
+      { returnDocument: "after" }
+    );
     res.setHeader("Content-Type", "application/json");
     res.status(200).json(response);
   } catch (err) {
@@ -120,24 +118,22 @@ const updateOrder = async (req, res, next) => {
 
 const deleteOrder = async (req, res, next) => {
   // #swagger.tags = ['Orders']
-  // #swagger.summary = "Delete Order record."
+  // #swagger.summary = "Delete Order record by ID."
+  // #swagger.description = "Delete Order record by ID."
   // #swagger.parameters["id"] = {description: "hexadecimal string 24 character"}
   // #swagger.responses[200] = {description: "OK: Order record was successfully deleted."}
   // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
+  // #swagger.responses[404] = {description: "Not Found: Could not find a record with that ID."}
   // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while deleting the Order record."}
   try {
     const ID = createObjectId(req.params.id);
 
-    const result = await mongodb
-      .getDb()
-      .db("Restaurant")
-      .collection("order")
-      .deleteOne({ _id: ID });
     res.setHeader("Content-Type", "application/json");
+    const result = await Order.deleteOne({ _id: ID });
     if (result.deletedCount === 0) {
-      res.status(200).json({
-        message: `Nothing to delete by ID ${req.params.id.toLowerCase()}.`
-      }); // Falsy (default) // Should we use 200 or 404 if nothing found in collection for deleteAdmin()?
+      res.status(404).json({
+        message: `Nothing to delete by ID ${ID}.`
+      }); // Use 404 if nothing found in collection
       return;
     }
     res.status(200).json({
@@ -154,15 +150,12 @@ const getOrderById = async (req, res, next) => {
   // #swagger.parameters["id"] = {description: "hexadecimal string 24 character"}
   // #swagger.responses[200] = {description: "OK: Order record was successfully retrieved."}
   // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
+  // #swagger.responses[404] = {description: "Not Found: Could not find a record with that ID."}
   // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while obtaining the Order record."}
   try {
     const ID = createObjectId(req.params.id);
 
-    const response = await mongodb
-      .getDb()
-      .db("Restaurant")
-      .collection("order")
-      .findOne({ _id: ID });
+    const response = await Order.find({ _id: ID });
     res.setHeader("Content-Type", "application/json");
     res.status(200).json(response);
   } catch (err) {
@@ -175,24 +168,22 @@ const getAllOrdersByUserId = async (req, res, next) => {
   // #swagger.tags = ['Orders']
   // #swagger.summary = "Get Order record by USER_ID."
   // #swagger.parameters["id"] = {description: "hexadecimal string 24 character"}
-  // #swagger.responses[200] = {description: "OK: Order record was successfully retrieved."}
+  // #swagger.responses[200] = {description: "OK: Order records were successfully retrieved."}
   // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
-  // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while obtaining the Order record."}
+  // #swagger.responses[404] = {description: "Not Found: Could not find a record with that ID."}
+  // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while obtaining the Order records."}
   try {
     const ID = createObjectId(req.params.id);
 
-    const response = await mongodb
-      .getDb()
-      .db("Restaurant")
-      .collection("order")
-      .find({ userID: ID });
-    console.log(response.length);
-    response.toArray().then((resArr) => {
-      res.setHeader("Content-Type", "application/json");
-      res.status(200).json(resArr);
-    });
+    res.setHeader("Content-Type", "application/json");
+    const result = await Order.find({ userID: ID });
+    if (result.length === 0) {
+      return res
+        .status(404)
+        .json({ message: `No orders to display by User ID ${ID}.` }); // Use 404 if nothing found in collection
+    }
+    res.status(200).json(result);
   } catch (err) {
-    if (err.isJoi === true) err.status = 422;
     next(err);
   }
 };

@@ -10,11 +10,12 @@ const cors = require("cors");
 // const mongoose = require("mongoose");
 
 const passport = require("passport");
-const mongodb = require("./data/database"); // unsure if this is needed with mongoose
+const database = require("./models");
 
-// TO ADD
-// MONGOOSE CODES (CONNECTION FUNCTION) AND SCHEMAS?
-// JOI CODES (SCHEMAS?)
+const { strategies } = require("./middleware/passport-strategies");
+
+// Use passport strategies (AKA "call them")
+strategies();
 
 const app = express();
 
@@ -111,11 +112,25 @@ app.get(
   }
 );
 
-mongodb.initDb((err) => {
-  if (err) {
-    console.log(err);
-  } else {
-    app.listen(port);
-    console.log(`Connected to DB and listening on ${port}`);
-  }
+/* eslint-disable-next-line no-unused-vars */
+app.use((err, req, res, next) => {
+  res.status(err.status || 500);
+  res.send({
+    error: {
+      status: err.status || 500,
+      message: err.message
+    }
+  });
 });
+
+database.mongoose
+  .connect(process.env.MONGODB_URI)
+  .then(() => {
+    app.listen(port, () => {
+      console.log(`Connected to DB and listening on ${port}`);
+    });
+  })
+  .catch((err) => {
+    console.error("Connection to database failed", err);
+    process.exit(1);
+  });

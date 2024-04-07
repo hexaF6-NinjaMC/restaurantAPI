@@ -1,5 +1,9 @@
+/**
+ * Contains functionality for Inventory management.
+ */
+
 const { createObjectId } = require("../helpers/utils");
-const mongodb = require("../data/database");
+const Inventory = require("../models/inv");
 const {
   inventoryPOSTSchema,
   inventoryPUTSchema
@@ -9,21 +13,18 @@ const getAll = async (req, res, next) => {
   // #swagger.tags = ['Inventory']
   // #swagger.summary = "Get All Inventory records."
   // #swagger.description = "Get All Inventory records."
+  // #swagger.responses[200] = {description: "OK: Inventory records were successfully pulled."}
+  // #swagger.responses[401] = {description: "Unauthorized: You must be logged in."}
+  // #swagger.responses[404] = {description: "Not Found: Could not find a record with that ID."}
+  // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while pulling the Inventory records."}
   try {
-    const result = await mongodb
-      .getDb()
-      .db("Restaurant")
-      .collection("inventory")
-      .find();
-    result.toArray().then((resArr) => {
-      if (resArr.length === 0) {
-        res.setHeader("Content-Type", "application/json");
-        res.status(200).json({ message: "No inventory to display." }); // Should use 200 or 404 if nothing found in collection for getAll()?
-        return;
-      }
-      res.setHeader("Content-Type", "application/json");
-      res.status(200).json(resArr);
-    });
+    const result = await Inventory.find({});
+    res.setHeader("Content-Type", "application/json");
+    if (result.length === 0) {
+      res.status(404).json({ message: "No inventory to display." }); // Use 404 if nothing found in collection
+      return;
+    }
+    res.status(200).json(result);
   } catch (err) {
     if (err.isJoi === true) err.status = 422;
     next(err);
@@ -59,13 +60,11 @@ const createItem = async (req, res, next) => {
     const invData = await inventoryPOSTSchema.validateAsync(invBody, {
       allowUnknown: true
     });
-    const result = await mongodb
-      .getDb()
-      .db("Restaurant")
-      .collection("inventory")
-      .insertOne(invData);
-    res.setHeader("Content-Type", "application/json");
-    res.status(200).json(result);
+    const result = await new Inventory(invData);
+    result.save().then(() => {
+      res.setHeader("Content-Type", "application/json");
+      res.status(200).json(result);
+    });
   } catch (err) {
     if (err.isJoi === true) err.status = 422;
     next(err);
@@ -83,11 +82,13 @@ const updateItem = async (req, res, next) => {
       }
     }
   } */
-  // #swagger.summary = "Update an Inventory record."
-  // #swagger.description = "Update an Inventory record."
+  // #swagger.summary = "Update an Inventory record by ID, with optional fields."
+  // #swagger.description = "Update an Inventory record by ID, with optional fields."
+  // #swagger.parameters["id"] = {description: "hexadecimal string 24 character"}
   // #swagger.responses[200] = {description: "OK: Inventory record was successfully updated."}
   // #swagger.responses[401] = {description: "Unauthorized: You must be logged in with an Admin/Manager account."}
   // #swagger.responses[403] = {description: "Forbidden: You must be logged in with an Admin/Manager account with the appropriate privileges."}
+  // #swagger.responses[404] = {description: "Not Found: Could not find a record with that ID."}
   // #swagger.responses[422] = {description: "Unprocessable Entity: Data is not valid."}
   // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while updating the Inventory record."}
   // res.status(200).json({ message: "Inventory PUT request" })
@@ -102,17 +103,13 @@ const updateItem = async (req, res, next) => {
     };
 
     const invData = await inventoryPUTSchema.validateAsync(invBody);
-    const result = await mongodb
-      .getDb()
-      .db("Restaurant")
-      .collection("inventory")
-      .findOneAndUpdate(
-        { _id: ID },
-        {
-          $set: invData
-        },
-        { returnDocument: "after" } // Use this setup for updating fields within record.
-      );
+    const result = await Inventory.findOneAndUpdate(
+      { _id: ID },
+      {
+        $set: invData
+      },
+      { returnDocument: "after" } // Use this setup for updating fields within record.
+    );
     res.setHeader("Content-Type", "application/json");
     res.status(200).json(result);
   } catch (err) {
@@ -123,30 +120,28 @@ const updateItem = async (req, res, next) => {
 
 const deleteItem = async (req, res, next) => {
   // #swagger.tags = ['Inventory']
-  // #swagger.summary = "Delete an Inventory record."
-  // #swagger.description = "Delete an Inventory record."
+  // #swagger.summary = "Delete an Inventory record by ID."
+  // #swagger.description = "Delete an Inventory record by ID."
+  // #swagger.parameters["id"] = {description: "hexadecimal string 24 character"}
   // #swagger.responses[200] = {description: "OK: Inventory record was successfully deleted."}
   // #swagger.responses[401] = {description: "Unauthorized: You must be logged in with an Admin/Manager account."}
   // #swagger.responses[403] = {description: "Forbidden: You must be logged in with an Admin/Manager account with the appropriate privileges."}
+  // #swagger.responses[404] = {description: "Not Found: Could not find a record with that ID."}
   // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while deleting the Inventory record."}
   try {
     const ID = createObjectId(req.params.id);
-    const result = await mongodb
-      .getDb()
-      .db("Restaurant")
-      .collection("inventory")
-      .deleteOne({ _id: ID });
-    if (result.deletedCount > 0) {
-      res.setHeader("Content-Type", "application/json");
-      res
-        .status(200)
-        .json({ message: `Deleted inventory item by ID ${req.params.id}` });
-    } else {
-      res.setHeader("Content-Type", "application/json");
-      res
-        .status(500)
-        .json({ message: `Nothing to delete by ID ${req.params.id}.` }); // Falsy(default) // Should we use 200 or 404 if nothing found in collection for deleteAdmin()?
+
+    res.setHeader("Content-Type", "application/json");
+    const result = await Inventory.deleteOne({ _id: ID });
+    if (result.deletedCount === 0) {
+      res.status(404).json({
+        message: `Nothing to delete by ID ${ID}.`
+      }); // Use 404 if nothing found in collection
+      return;
     }
+    res.status(200).json({
+      message: `Successfully deleted Inventory record with ID ${ID}.`
+    });
   } catch (err) {
     next(err);
   }
@@ -156,22 +151,19 @@ const getById = async (req, res, next) => {
   // #swagger.tags = ['Inventory']
   // #swagger.summary = "Get inventory items by Object ID."
   // #swagger.description = "Get inventory items by Object ID."
+  // #swagger.parameters["id"] = {description: "hexadecimal string 24 character"}
   // #swagger.responses[200] = {description: "OK: Inventory item was successfully received."}
-  // #swagger.responses[404] = {description: "Error: No inventory item found with id provided"}
+  // #swagger.responses[404] = {description: "Not Found: Could not find a record with that ID."}
   // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while requesting the Inventory item."}
   try {
     const ID = createObjectId(req.params.id);
-    const result = await mongodb
-      .getDb()
-      .db("Restaurant")
-      .collection("inventory")
-      .find({ _id: ID });
-    result.toArray().then((invArr) => {
-      if (invArr.length === 0) {
-        res.status(404).json(`No inventory item found with id ${ID}`);
-      }
-      res.status(200).json(invArr[0]);
-    });
+
+    res.setHeader("Content-Type", "application/json");
+    const result = await Inventory.find({ _id: ID });
+    if (result.length === 0) {
+      res.status(404).json(`No inventory item found with ID ${ID}`); // Use 404 if nothing found in collection
+    }
+    res.status(200).json(result);
   } catch (err) {
     next(err);
   }

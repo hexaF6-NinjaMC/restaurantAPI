@@ -5,14 +5,8 @@
 
 // const passport = require("passport");
 const router = require("express").Router();
-const { strategies } = require("../middleware/passport-strategies");
-
-// Use passport strategies (AKA "call them")
-strategies();
 
 router.use("/", require("./swagger"));
-
-// LOGIN - LOGOUT may not be correct?
 
 // prefix </admin and /user> with /auth
 router.use("/auth", require("./auth"));

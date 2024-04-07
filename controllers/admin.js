@@ -2,9 +2,8 @@
  * Contains functionality for admin/manager operators.
  */
 
-// const createError = require("http-errors"); // TODO: implement error handling
 const { createObjectId } = require("../helpers/utils");
-const mongodb = require("../data/database");
+const Admin = require("../models/admin");
 const { adminPOSTSchema, adminPUTSchema } = require("../helpers/validate");
 
 /**
@@ -21,23 +20,16 @@ const getAll = async (req, res, next) => {
   // #swagger.responses[200] = {description: "OK: Admin record was successfully created."}
   // #swagger.responses[401] = {description: "Unauthorized: You must be logged in with an Admin account."}
   // #swagger.responses[403] = {description: "Forbidden: You must be logged in with an Admin account with the appropriate privileges."}
-  // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while creating the Admin profile."}
+  // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while retrieving the Admin profiles."}
   try {
-    const result = await mongodb
-      .getDb()
-      .db("Restaurant")
-      .collection("admin")
-      .find({ op_lvl: parseInt(req.query.op_lvl, 10) });
-    result.toArray().then((resArr) => {
-      if (resArr.length === 0) {
-        res.setHeader("Content-Type", "application/json");
-        return parseInt(req.query.op_lvl, 10) === 1
-          ? res.status(200).json({ message: "No Administrators to display." }) // Truthy
-          : res.status(200).json({ message: "No Managers to display." }); // Falsy (default) // Use 200 if nothing found in collection
-      }
-      res.setHeader("Content-Type", "application/json");
-      res.status(200).json(resArr);
-    });
+    res.setHeader("Content-Type", "application/json");
+    const result = await Admin.find({ op_lvl: parseInt(req.query.op_lvl, 10) });
+    if (result.length === 0) {
+      return parseInt(req.query.op_lvl, 10) === 1
+        ? res.status(200).json({ message: "No Administrators to display." }) // Truthy
+        : res.status(200).json({ message: "No Managers to display." }); // Falsy (default) // Use 200 if nothing found in collection
+    }
+    res.status(200).json(result);
   } catch (err) {
     next(err);
   }
@@ -48,7 +40,6 @@ const getAll = async (req, res, next) => {
  * or returns errors if they are encountered.
  */
 const createAdmin = async (req, res, next) => {
-  // TODO: implement admin creation, permission handling for op-lvl 1
   // #swagger.tags = ["Admin"]
   /* #swagger.requestBody = {
     content: {
@@ -79,13 +70,11 @@ const createAdmin = async (req, res, next) => {
     const adminData = await adminPOSTSchema.validateAsync(adminBody, {
       allowUnknown: true
     });
-    const result = await mongodb
-      .getDb()
-      .db("Restaurant")
-      .collection("admin")
-      .insertOne(adminData);
-    res.setHeader("Content-Type", "application/json");
-    res.status(200).json(result);
+    const result = await new Admin(adminData);
+    result.save().then(() => {
+      res.setHeader("Content-Type", "application/json");
+      res.status(200).json(result);
+    });
   } catch (err) {
     if (err.isJoi === true) err.status = 422;
     next(err);
@@ -96,7 +85,6 @@ const createAdmin = async (req, res, next) => {
  * Attempts to update a record with `req.body` fields
  */
 const updateAdmin = async (req, res, next) => {
-  // TODO: implement admin creation, permission handling for op-lvl 1
   // #swagger.tags = ["Admin"]
   /* #swagger.requestBody = {
     content: {
@@ -107,14 +95,15 @@ const updateAdmin = async (req, res, next) => {
       }
     }
   } */
-  // #swagger.summary = "Update Admin/Manager record, ref'd by _id, with optional fields."
-  // #swagger.description = "Update Admin/Manager record, ref'd by _id, with optional fields."
-  // #swagger.responses[200] = {description: "OK: Admin record was successfully created."}
+  // #swagger.summary = "Update Admin/Manager record by ID, with optional fields."
+  // #swagger.description = "Update Admin/Manager record by ID, with optional fields."
+  // #swagger.parameters["id"] = {description: "hexadecimal string 24 character"}
+  // #swagger.responses[200] = {description: "OK: Admin record was successfully updated."}
   // #swagger.responses[401] = {description: "Unauthorized: You must be logged in with an Admin account."}
   // #swagger.responses[403] = {description: "Forbidden: You must be logged in with an Admin account with the appropriate privileges."}
   // #swagger.responses[404] = {description: "Not Found: Could not find a record with that ID."}
   // #swagger.responses[422] = {description: "Unprocessable Entity: Data is not valid."}
-  // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while creating the Admin profile."}
+  // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while updating the Admin profile."}
   try {
     const ID = createObjectId(req.params.id);
 
@@ -127,17 +116,13 @@ const updateAdmin = async (req, res, next) => {
       profilePicURI: req.body.profilePicURI
     };
     const adminData = await adminPUTSchema.validateAsync(adminBody);
-    const result = await mongodb
-      .getDb()
-      .db("Restaurant")
-      .collection("admin")
-      .findOneAndUpdate(
-        { _id: ID },
-        {
-          $set: adminData
-        },
-        { returnDocument: "after" } // Use this setup for updating fields within record.
-      );
+    const result = await Admin.findOneAndUpdate(
+      { _id: ID },
+      {
+        $set: adminData
+      },
+      { returnDocument: "after" } // Use this setup for updating fields within record.
+    );
     res.setHeader("Content-Type", "application/json");
     res.status(200).json(result);
   } catch (err) {
@@ -147,23 +132,20 @@ const updateAdmin = async (req, res, next) => {
 };
 
 const deleteAdmin = async (req, res, next) => {
-  // TODO: implement admin creation, permission handling for op-lvl 1
   // #swagger.tags = ["Admin"]
   // #swagger.summary = "Delete Admin/Manager record by ID."
   // #swagger.description = "Delete Admin/Manager record by ID."
+  // #swagger.parameters["id"] = {description: "hexadecimal string 24 character"}
   // #swagger.responses[200] = {description: "OK: Admin record was successfully created."}
   // #swagger.responses[401] = {description: "Unauthorized: You must be logged in with an Admin account."}
   // #swagger.responses[403] = {description: "Forbidden: You must be logged in with an Admin account with the appropriate privileges."}
   // #swagger.responses[404] = {description: "Not Found: Could not find a record with that ID."}
-  // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while creating the Admin profile."}
+  // #swagger.responses[500] = {description: "Internal Server Error: Something happened on the server side while deleting the Admin profile."}
   try {
     const ID = createObjectId(req.params.id);
-    const result = await mongodb
-      .getDb()
-      .db("Restaurant")
-      .collection("admin")
-      .deleteOne({ _id: ID });
+
     res.setHeader("Content-Type", "application/json");
+    const result = await Admin.deleteOne({ _id: ID });
     if (result.deletedCount === 0) {
       res.status(404).json({
         message: `Nothing to delete by ID ${ID}.`

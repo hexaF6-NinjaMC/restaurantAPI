@@ -46,7 +46,7 @@
             "description": "Forbidden: You must be logged in with an Admin account with the appropriate privileges."
           },
           "500": {
-            "description": "Internal Server Error: Something happened on the server side while creating the Admin profile."
+            "description": "Internal Server Error: Something happened on the server side while retrieving the Admin profiles."
           }
         }
       },
@@ -85,8 +85,8 @@
     "/admin/{id}": {
       "put": {
         "tags": ["Admin"],
-        "summary": "Update Admin/Manager record, ref'd by _id, with optional fields.",
-        "description": "Update Admin/Manager record, ref'd by _id, with optional fields.",
+        "summary": "Update Admin/Manager record by ID, with optional fields.",
+        "description": "Update Admin/Manager record by ID, with optional fields.",
         "parameters": [
           {
             "name": "id",
@@ -94,19 +94,13 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
-          },
-          {
-            "name": "user_id",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
+            },
+            "description": "hexadecimal string 24 character"
           }
         ],
         "responses": {
           "200": {
-            "description": "OK: Admin record was successfully created."
+            "description": "OK: Admin record was successfully updated."
           },
           "400": {
             "description": "Bad Request"
@@ -124,7 +118,7 @@
             "description": "Unprocessable Entity: Data is not valid."
           },
           "500": {
-            "description": "Internal Server Error: Something happened on the server side while creating the Admin profile."
+            "description": "Internal Server Error: Something happened on the server side while updating the Admin profile."
           }
         },
         "requestBody": {
@@ -148,14 +142,8 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
-          },
-          {
-            "name": "user_id",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
+            },
+            "description": "hexadecimal string 24 character"
           }
         ],
         "responses": {
@@ -175,7 +163,7 @@
             "description": "Not Found: Could not find a record with that ID."
           },
           "500": {
-            "description": "Internal Server Error: Something happened on the server side while creating the Admin profile."
+            "description": "Internal Server Error: Something happened on the server side while deleting the Admin profile."
           }
         }
       }
@@ -202,8 +190,8 @@
       },
       "post": {
         "tags": ["User"],
-        "summary": "Create a new User record.",
-        "description": "Create a new User record.",
+        "summary": "Create a new User record, with optional fields.",
+        "description": "Create a new User record, with optional fields.",
         "responses": {
           "200": {
             "description": "OK: User record was successfully created."
@@ -244,14 +232,8 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
-          },
-          {
-            "name": "user_id",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
+            },
+            "description": "hexadecimal string 24 character"
           }
         ],
         "responses": {
@@ -277,8 +259,8 @@
       },
       "put": {
         "tags": ["User"],
-        "summary": "Update User record, ref'd by _id, with optional fields.",
-        "description": "Update User record, ref'd by _id, with optional fields.",
+        "summary": "Update User record by ID, with optional fields.",
+        "description": "Update User record by ID, with optional fields.",
         "parameters": [
           {
             "name": "id",
@@ -286,14 +268,8 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
-          },
-          {
-            "name": "user_id",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
+            },
+            "description": "hexadecimal string 24 character"
           }
         ],
         "responses": {
@@ -331,8 +307,8 @@
       },
       "delete": {
         "tags": ["User"],
-        "summary": "Delete User record, ref'd by _id, with optional fields.",
-        "description": "Delete User record, ref'd by _id, with optional fields.",
+        "summary": "Delete User record by ID.",
+        "description": "Delete User record by ID.",
         "parameters": [
           {
             "name": "id",
@@ -340,14 +316,8 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
-          },
-          {
-            "name": "user_id",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
+            },
+            "description": "hexadecimal string 24 character"
           }
         ],
         "responses": {
@@ -449,13 +419,6 @@
               "type": "string"
             },
             "description": "hexadecimal string 24 character"
-          },
-          {
-            "name": "user_id",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -468,6 +431,9 @@
           "401": {
             "description": "Unauthorized: You must be logged in."
           },
+          "404": {
+            "description": "Not Found: Could not find a record with that ID."
+          },
           "500": {
             "description": "Internal Server Error: Something happened on the server side while obtaining the Order record."
           }
@@ -475,8 +441,8 @@
       },
       "put": {
         "tags": ["Orders"],
-        "summary": "Updated Order record, with optional fields.",
-        "description": "",
+        "summary": "Update Order record, with optional fields.",
+        "description": "Update Order record, with optional fields.",
         "parameters": [
           {
             "name": "id",
@@ -486,13 +452,6 @@
               "type": "string"
             },
             "description": "hexadecimal string 24 character"
-          },
-          {
-            "name": "user_id",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -505,6 +464,9 @@
           "401": {
             "description": "Unauthorized: You must be logged in."
           },
+          "404": {
+            "description": "Not Found: Could not find a record with that ID."
+          },
           "422": {
             "description": "Unprocessable Entity: Data is not valid."
           },
@@ -516,15 +478,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "itemName": {
-                    "example": "any"
-                  },
-                  "amount": {
-                    "example": "any"
-                  }
-                }
+                "$ref": "#/components/schemas/schemaOrderOptional"
               }
             }
           }
@@ -532,8 +486,8 @@
       },
       "delete": {
         "tags": ["Orders"],
-        "summary": "Delete Order record.",
-        "description": "",
+        "summary": "Delete Order record by ID.",
+        "description": "Delete Order record by ID.",
         "parameters": [
           {
             "name": "id",
@@ -543,13 +497,6 @@
               "type": "string"
             },
             "description": "hexadecimal string 24 character"
-          },
-          {
-            "name": "user_id",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -561,6 +508,9 @@
           },
           "401": {
             "description": "Unauthorized: You must be logged in."
+          },
+          "404": {
+            "description": "Not Found: Could not find a record with that ID."
           },
           "500": {
             "description": "Internal Server Error: Something happened on the server side while deleting the Order record."
@@ -582,18 +532,11 @@
               "type": "string"
             },
             "description": "hexadecimal string 24 character"
-          },
-          {
-            "name": "user_id",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK: Order record was successfully retrieved."
+            "description": "OK: Order records were successfully retrieved."
           },
           "400": {
             "description": "Bad Request"
@@ -601,8 +544,11 @@
           "401": {
             "description": "Unauthorized: You must be logged in."
           },
+          "404": {
+            "description": "Not Found: Could not find a record with that ID."
+          },
           "500": {
-            "description": "Internal Server Error: Something happened on the server side while obtaining the Order record."
+            "description": "Internal Server Error: Something happened on the server side while obtaining the Order records."
           }
         }
       }
@@ -614,7 +560,16 @@
         "description": "Get All Inventory records.",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK: Inventory records were successfully pulled."
+          },
+          "401": {
+            "description": "Unauthorized: You must be logged in."
+          },
+          "404": {
+            "description": "Not Found: Could not find a record with that ID."
+          },
+          "500": {
+            "description": "Internal Server Error: Something happened on the server side while pulling the Inventory records."
           }
         }
       },
@@ -662,14 +617,8 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
-          },
-          {
-            "name": "user_id",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
+            },
+            "description": "hexadecimal string 24 character"
           }
         ],
         "responses": {
@@ -680,7 +629,7 @@
             "description": "Bad Request"
           },
           "404": {
-            "description": "Error: No inventory item found with id provided"
+            "description": "Not Found: Could not find a record with that ID."
           },
           "500": {
             "description": "Internal Server Error: Something happened on the server side while requesting the Inventory item."
@@ -689,8 +638,8 @@
       },
       "put": {
         "tags": ["Inventory"],
-        "summary": "Update an Inventory record.",
-        "description": "Update an Inventory record.",
+        "summary": "Update an Inventory record by ID, with optional fields.",
+        "description": "Update an Inventory record by ID, with optional fields.",
         "parameters": [
           {
             "name": "id",
@@ -698,18 +647,25 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "hexadecimal string 24 character"
           }
         ],
         "responses": {
           "200": {
             "description": "OK: Inventory record was successfully updated."
           },
+          "400": {
+            "description": "Bad Request"
+          },
           "401": {
             "description": "Unauthorized: You must be logged in with an Admin/Manager account."
           },
           "403": {
             "description": "Forbidden: You must be logged in with an Admin/Manager account with the appropriate privileges."
+          },
+          "404": {
+            "description": "Not Found: Could not find a record with that ID."
           },
           "422": {
             "description": "Unprocessable Entity: Data is not valid."
@@ -730,8 +686,8 @@
       },
       "delete": {
         "tags": ["Inventory"],
-        "summary": "Delete an Inventory record.",
-        "description": "Delete an Inventory record.",
+        "summary": "Delete an Inventory record by ID.",
+        "description": "Delete an Inventory record by ID.",
         "parameters": [
           {
             "name": "id",
@@ -739,18 +695,25 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "hexadecimal string 24 character"
           }
         ],
         "responses": {
           "200": {
             "description": "OK: Inventory record was successfully deleted."
           },
+          "400": {
+            "description": "Bad Request"
+          },
           "401": {
             "description": "Unauthorized: You must be logged in with an Admin/Manager account."
           },
           "403": {
             "description": "Forbidden: You must be logged in with an Admin/Manager account with the appropriate privileges."
+          },
+          "404": {
+            "description": "Not Found: Could not find a record with that ID."
           },
           "500": {
             "description": "Internal Server Error: Something happened on the server side while deleting the Inventory record."

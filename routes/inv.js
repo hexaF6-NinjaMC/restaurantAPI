@@ -18,18 +18,10 @@ router.get("/:id", isValidId, invController.getById);
 router.post("/", isAuthenticated, invController.createItem);
 
 // update inventory
-router.put(
-  "/:id",
-  /* validation.isValidId, */ isAuthenticated,
-  invController.updateItem
-);
+router.put("/:id", isAuthenticated, isValidId, invController.updateItem);
 
 // delete inventory
-router.delete(
-  "/:id",
-  /* validation.isValidId, */ isAuthenticated,
-  invController.deleteItem
-);
+router.delete("/:id", isAuthenticated, isValidId, invController.deleteItem);
 
 // gotta implement valid and auth
 // validation needs rules for Post and Put, and isValidId for get/put/delete with ID
