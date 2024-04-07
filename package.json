@@ -45,6 +45,8 @@
     "passport": "^0.7.0",
     "passport-github2": "^0.1.12",
     "passport-google-oauth2": "^0.2.0",
+    "passport-mock": "^0.0.3",
+    "passport-mock-strategy": "^2.0.0",
     "swagger-autogen": "^2.23.7",
     "swagger-ui-express": "^5.0.0"
   },
