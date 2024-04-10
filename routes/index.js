@@ -3,8 +3,15 @@
  * <domain>/auth, <domain>/admin, <domain>/user, <domain>/order, <domain>/inventory
  */
 
-// const passport = require("passport");
 const router = require("express").Router();
+
+router.get(
+  // #swagger.ignore = true
+  "/",
+  async (req, res) => {
+    res.send("Restaurant API");
+  }
+);
 
 router.use("/", require("./swagger"));
 

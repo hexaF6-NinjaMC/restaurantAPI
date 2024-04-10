@@ -26,6 +26,14 @@ afterEach((done) => {
 });
 
 describe("Test GET method", () => {
+  describe("for / (root)", () => {
+    it("responds to /", async () => {
+      const res = await request(app).get("/");
+      expect(res.text).toEqual("Restaurant API");
+      expect(res.statusCode).toBe(200);
+    });
+  });
+
   describe("getAll() for /inventory", () => {
     it("responds to /inventory", async () => {
       const res = await request(app).get("/inventory");
