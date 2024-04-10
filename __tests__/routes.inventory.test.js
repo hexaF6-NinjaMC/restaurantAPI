@@ -29,7 +29,6 @@ describe("Test GET method", () => {
   describe("getAll() for /inventory", () => {
     it("responds to /inventory", async () => {
       const res = await request(app).get("/inventory");
-      console.log(res.body);
       expect(res.body.length).toBeGreaterThan(0);
       expect(res.statusCode).toBe(200);
     });
