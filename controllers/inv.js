@@ -26,7 +26,6 @@ const getAll = async (req, res, next) => {
     }
     res.status(200).json(result);
   } catch (err) {
-    if (err.isJoi === true) err.status = 422;
     next(err);
   }
 };
